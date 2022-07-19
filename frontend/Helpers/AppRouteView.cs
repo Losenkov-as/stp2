@@ -15,6 +15,9 @@ namespace BlazorApp.Helpers
         [Inject]
         public IAccountService AccountService { get; set; }
 
+        //[Inject]
+        //public IRoleService RoleService { get; set; }
+
         protected override void Render(RenderTreeBuilder builder)
         {
             var authorize = Attribute.GetCustomAttribute(RouteData.PageType, typeof(AuthorizeAttribute)) != null;

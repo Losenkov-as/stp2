@@ -17,6 +17,7 @@ namespace BlazorApp
 
             builder.Services
                 .AddScoped<IAccountService, AccountService>()
+                .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IAlertService, AlertService>()
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
@@ -39,6 +40,9 @@ namespace BlazorApp
 
             var accountService = host.Services.GetRequiredService<IAccountService>();
             await accountService.Initialize();
+
+            var roleService = host.Services.GetRequiredService<IRoleService>();
+            await roleService.Initialize();
 
             await host.RunAsync();
         }

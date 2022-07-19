@@ -1,0 +1,68 @@
+﻿@page "/roles"
+@attribute [Authorize]
+@inject IRoleService RoleService
+
+<h1>Роли</h1>
+<NavLink href="roles/add" class="btn btn-sm btn-success mb-2">Добавить роль</NavLink>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 70%">Наименование</th>
+            <th style="width: 30%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (roles != null)
+        {
+            foreach (var role in roles)
+            {
+                <tr>
+                    <td>@role.Name</td>
+
+                    <td style="white-space: nowrap">
+                        <NavLink href="@($"roles/edit/{role.Id}")" class="btn btn-sm btn-primary mr-1">Edit</NavLink>
+                        <button @onclick="@(() => DeleteUser(role.Id))" disabled="@role.IsDeleting" class="btn btn-sm btn-danger btn-delete-role">
+                            @if (role.IsDeleting) 
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            else
+                            {
+                                <span>Delete</span>
+                            }
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        @if (loading)
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private bool loading;
+    private IList<Role> roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        roles = await RoleService.GetAll();
+        loading = false;
+    }
+
+    private async void DeleteUser(string id) 
+    {
+        var role = roles.First(x => x.Id == id);
+        role.IsDeleting = true;
+        await RoleService.Delete(id);
+        roles.Remove(role);
+        StateHasChanged();
+    }
+}

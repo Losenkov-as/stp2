@@ -1,2 +1,4 @@
 dotnet watch run
 Add-Migration Initial -context DataContext
+professorweb.ru
+metanit.com

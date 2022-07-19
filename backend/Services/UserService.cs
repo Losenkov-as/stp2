@@ -6,6 +6,7 @@ using WebApi.Authorization;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Services
 {
@@ -51,7 +52,8 @@ namespace WebApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+
+            return _context.Users.Include(u => u.Roles);
         }
 
         public User GetById(int id)
@@ -63,7 +65,7 @@ namespace WebApi.Services
         {
             // validate
             if (_context.Users.Any(x => x.Username == model.Username))
-                throw new AppException("Username '" + model.Username + "' is already taken");
+                throw new AppException("Имя пользователя '" + model.Username + "' уже существует");
 
             // map model to new user object
             var user = _mapper.Map<User>(model);

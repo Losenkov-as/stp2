@@ -20,5 +20,10 @@ namespace WebApi.Helpers
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Booking> Bookings { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
+        
     }
 }

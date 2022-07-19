@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace WebApi.Entities
@@ -11,5 +12,7 @@ namespace WebApi.Entities
 
         [JsonIgnore]
         public string PasswordHash { get; set; }
+        public ICollection<Role> Roles { get; set; }
+
     }
 }
