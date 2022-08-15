@@ -4,7 +4,7 @@
 @inject IRoleService RoleService
 @inject NavigationManager NavigationManager
 
-<h1>Add User</h1>
+<h1>Добавить роль</h1>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="form-row">
@@ -20,9 +20,9 @@
             {
                 <span class="spinner-border spinner-border-sm mr-1"></span>
             }
-            Save
+            Сохранить
         </button>
-        <NavLink href="users" class="btn btn-link">Cancel</NavLink>
+        <NavLink href="users" class="btn btn-link">Отмена</NavLink>
     </div>
 </EditForm>
 
