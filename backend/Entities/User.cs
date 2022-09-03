@@ -13,8 +13,6 @@ namespace WebApi.Entities
         [JsonIgnore]
         public string PasswordHash { get; set; }
         public ICollection<Role> Roles { get; set; }
-
-        public ICollection<Location> Locations { get; set; }
         public ICollection<Maintenance> Maintenances { get; set; }
 
 

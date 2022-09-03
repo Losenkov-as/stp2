@@ -18,8 +18,11 @@ namespace BlazorApp
             builder.Services
                 .AddScoped<IAccountService, AccountService>()
                 .AddScoped<IRoleService, RoleService>()
+                .AddScoped<ILocationService, LocationService>()
                 .AddScoped<IAlertService, AlertService>()
                 .AddScoped<IHttpService, HttpService>()
+                .AddScoped<IStatusService, StatusService>()
+                .AddScoped<IMachineService, MachineService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             // configure http client
@@ -43,6 +46,15 @@ namespace BlazorApp
 
             var roleService = host.Services.GetRequiredService<IRoleService>();
             await roleService.Initialize();
+
+            var locationService = host.Services.GetRequiredService<ILocationService>();
+            await roleService.Initialize();
+
+            var machineService = host.Services.GetRequiredService<IMachineService>();
+            await machineService.Initialize();
+
+            var statusService = host.Services.GetRequiredService<IStatusService>();
+            await statusService.Initialize();
 
             await host.RunAsync();
         }

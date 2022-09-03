@@ -13,6 +13,7 @@ using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Services;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WebApi
 {
@@ -37,14 +38,21 @@ namespace WebApi
             services.AddCors();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //  AddJsonOptions(x =>
+            //x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            //         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // configure strongly typed settings objects
             services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
 
             // configure DI for application services
+
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IMachineService, MachineService>();
         }
 
         // configure the HTTP request pipeline

@@ -9,7 +9,6 @@ namespace WebApi.Entities
     {
         public int Id { get; set; }
         public string InventoryNumber { get; set; }
-
         public ICollection<Maintenance> Maintenances { get; set; }
 
     }

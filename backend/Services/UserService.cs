@@ -6,6 +6,7 @@ using WebApi.Authorization;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.Users;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Services
@@ -98,9 +99,10 @@ namespace WebApi.Services
 
         public void Delete(int id)
         {
-            var user = getUser(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
+            var user = getUser(id);                     // как правильно удалять записи с внешними ключами? сейчас на этой функции 
+            _context.Users.Remove(user);                // исключение из-за внешнего ключа
+            _context.SaveChanges();                                           
+
         }
 
         // helper methods

@@ -47,12 +47,7 @@ namespace WebApi.Migrations
                     b.Property<string>("Room")
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Locations");
                 });
@@ -176,15 +171,6 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApi.Entities.Location", b =>
-                {
-                    b.HasOne("WebApi.Entities.User", "User")
-                        .WithMany("Locations")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebApi.Entities.Maintenance", b =>
                 {
                     b.HasOne("WebApi.Entities.Location", "Location")
@@ -224,8 +210,6 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.User", b =>
                 {
-                    b.Navigation("Locations");
-
                     b.Navigation("Maintenances");
                 });
 #pragma warning restore 612, 618
