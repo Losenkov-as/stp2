@@ -1,5 +1,6 @@
 ﻿@page "/users"
 @attribute [Authorize]
+@inject IRoleService RoleService
 @inject IAccountService AccountService
 
 <h1>Пользователи</h1>
@@ -22,38 +23,37 @@
         {
             foreach (var user in users)
             {
-        <tr>
-            <td>@user.LastName</td>
-            <td>@user.FirstName</td>
-            <td>@user.Patronymic</td>
-            <td>@user.Username</td>
-            <td>@user.Department</td>
-            <td>@user.Position</td>
-            <td>
-                @foreach (Role role in user.roles)
-                {
-                    if (user.roles.ToArray().Length > 1)
-                        @string.Concat(role.Name, ", ")
-                        else
-                            @role.Name;
+                <tr>
+                    <td>@user.LastName</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.Patronymic</td>
+                    <td>@user.Username</td>
+                    <td>@user.Department</td>
+                    <td>@user.Position</td>
+                    <td>
+                        @foreach (Role role in user.Roles)
+                        {
+                            if (user.Roles.ToArray().Length > 1)
+                                @string.Concat(role.Name, ", ")
+                                else
+                                    @role.Name;
+                                }
+                    </td>
 
-                        }
-            </td>
-
-            <td style="white-space: nowrap">
-                <NavLink href="@($"users/edit/{user.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
-                <button @onclick="@(() => DeleteUser(user.Id))" disabled="@user.IsDeleting" class="btn btn-sm btn-danger ">
-                    @if (user.IsDeleting)
-                    {
-                        <span class="spinner-border spinner-border-sm"></span>
-                    }
-                    else
-                    {
-                        <span>Удалить</span>
-                    }
-                </button>
-            </td>
-        </tr>
+                    <td style="white-space: nowrap">
+                        <NavLink href="@($"users/edit/{user.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
+                        <button @onclick="@(() => DeleteUser(user.Id))" disabled="@user.IsDeleting" class="btn btn-sm btn-danger ">
+                            @if (user.IsDeleting)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            else
+                            {
+                                <span>Удалить</span>
+                            }
+                        </button>
+                    </td>
+                </tr>
             }
         }
         @if (loading)
@@ -78,7 +78,7 @@
         loading = false;
     }
 
-    private async void DeleteUser(string id) 
+    private async void DeleteUser(string id)
     {
         var user = users.First(x => x.Id == id);
         user.IsDeleting = true;

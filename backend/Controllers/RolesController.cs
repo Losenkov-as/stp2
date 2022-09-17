@@ -39,15 +39,15 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _roleService.GetAll();
-            return Ok(users);
+            var roles = _roleService.GetAll();
+            return Ok(roles);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var user = _roleService.GetById(id);
-            return Ok(user);
+            var role = _roleService.GetById(id);
+            return Ok(role);
         }
 
         [HttpPut("{id}")]

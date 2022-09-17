@@ -86,20 +86,20 @@ namespace WebApi
             app.UseEndpoints(x => x.MapControllers());
 
 
-            {
-                var role1 = new Role { Name = "Администратор" };
-                var role2 = new Role { Name = "Пользователь" };
-                var users = new List<User>
-                {
+            //{
+            //    var role1 = new Role { Name = "Администратор" };
+            //    var role2 = new Role { Name = "Пользователь" };
+            //    var users = new List<User>
+            //    {
 
-                    new User { Username = "admin", PasswordHash = BCryptNet.HashPassword("admin"), Roles = new List<Role>{role1} },
-                    new User { Username = "user", PasswordHash = BCryptNet.HashPassword("user"), Roles = new List<Role>{role2} }
-                };
-                using var scope = app.ApplicationServices.CreateScope();
-                var dataContexxt = scope.ServiceProvider.GetRequiredService<DataContext>();
-                dataContext.Users.AddRange(users);
-                dataContext.SaveChanges();
-            }
+            //        new User { Username = "admin", PasswordHash = BCryptNet.HashPassword("admin"), Roles = new List<Role>{role1} },
+            //        new User { Username = "user", PasswordHash = BCryptNet.HashPassword("user"), Roles = new List<Role>{role2} }
+            //    };
+            //    using var scope = app.ApplicationServices.CreateScope();
+            //    var dataContexxt = scope.ServiceProvider.GetRequiredService<DataContext>();
+            //    dataContext.Users.AddRange(users);
+            //    dataContext.SaveChanges();
+            //}
         }
 
 

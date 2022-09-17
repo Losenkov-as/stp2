@@ -14,7 +14,7 @@ namespace BlazorApp.Models
 
 
         public string Token { get; set; }
-        public List<Role> roles { get; set; } = new List<Role>();
+        public List<Role> Roles { get; set; } = new List<Role>();
         public bool IsDeleting { get; set; }
     }
 }

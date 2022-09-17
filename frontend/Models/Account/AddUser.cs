@@ -5,9 +5,8 @@ namespace BlazorApp.Models.Account
 {
     public class AddUser
     {
-        public AddUser() {
-            Roles = new string[] { };
-        }
+
+
         [Required]
         public string FirstName { get; set; }
 
@@ -23,11 +22,17 @@ namespace BlazorApp.Models.Account
 
         [Required]
         public string Username { get; set; }
-        [Required, MinLength(1)]
-        public string[] Roles { get; set; }
+
+        [Required]
+        public List<string> Roles { get; set; }
 
         [Required]
         [MinLength(6, ErrorMessage = "Пароль должен быть не менее 6 символов")]
         public string Password { get; set; }
+
+        public AddUser()
+        {
+              Roles = new List<string>();
+        }
     }
 }

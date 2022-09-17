@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlazorApp.Models.Account
@@ -16,6 +17,9 @@ namespace BlazorApp.Models.Account
         [MinLength(6, ErrorMessage = "The Password field must be a minimum of 6 characters")]
         public string Password { get; set; }
 
+        [Required]
+        public List<Role> Roles { get; set; }
+
         public EditUser() { }
 
         public EditUser(User user)
@@ -23,6 +27,7 @@ namespace BlazorApp.Models.Account
             FirstName = user.FirstName;
             LastName = user.LastName;
             Username = user.Username;
+            Roles = user.Roles;
         }
     }
 }

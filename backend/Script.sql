@@ -1,8 +1,8 @@
 insert into "Machines"  ("Id","InventoryNumber") values (1, '001');
 insert into "Machines"  ("Id","InventoryNumber") values (2, '002');
 
-insert into "Locations"  ("Id","Room","Build", "UserId") values (1, '111', '111', 2);
-insert into "Locations"  ("Id","Room","Build", "UserId") values (2, '112', '112', 2);
+insert into "Locations"  ("Id","Room","Build") values (1, '111', '111');
+insert into "Locations"  ("Id","Room","Build") values (2, '112', '112');
 
 insert into "Statuses"  ("Id","Name") values (1,'Работает');
 insert into "Statuses"  ("Id","Name") values (2, 'Отказ');

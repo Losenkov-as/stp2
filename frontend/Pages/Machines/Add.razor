@@ -38,7 +38,7 @@
         try
         {
             await MachineService.Create(model);
-            AlertService.Success("Местоположение успешно добавлено", keepAfterRouteChange: true);
+            AlertService.Success("Станок успешно добавлен", keepAfterRouteChange: true);
             NavigationManager.NavigateTo("machines");
         }
         catch (Exception ex)

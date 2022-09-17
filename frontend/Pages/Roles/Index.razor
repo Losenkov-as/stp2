@@ -20,7 +20,7 @@
                     <td>@role.Name</td>
 
                     <td style="white-space: nowrap">
-                        <NavLink href="@($"roles/edit/{role.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
+                        @*<NavLink href="@($"roles/edit/{role.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
                         <button @onclick="@(() => DeleteUser(role.Id))" disabled="@role.IsDeleting" class="btn btn-sm btn-danger btn-delete-role">
                             @if (role.IsDeleting) 
                             {

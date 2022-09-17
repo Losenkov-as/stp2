@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @inject IAlertService AlertService
 @inject IAccountService AccountService
+@inject IRoleService RoleService
 @inject NavigationManager NavigationManager
 
 <h1>Добавить пользователя</h1>
@@ -53,14 +54,15 @@
     <div class="form-row">
         <div class="form-group col">
             <label>Роли</label>
-            <InputSelect @bind-Value="model.Roles" class="form-control">
-                <option value="white">White</option>
-                <option value="red">red</option>
-
-
-            </InputSelect>
-
-            <ValidationMessage For="@(() => model.Roles)" />
+            <select multiple class="form-select">
+                @if (roles != null)
+                {
+                    @foreach (var item in roles)
+                    {
+                        <option value="@item.Id" @onclick=@((e) => OptionClickEvent(@item.Id,e))>@item.Name</option>
+                    } 
+                }
+            </select>
         </div>
     </div>
     <div class="form-group">
@@ -76,14 +78,31 @@
 </EditForm>
 
 @code {
+    private List<string> myHolder = new List<string>();
+
     private AddUser model = new AddUser();
     private bool loading;
+
+    private IList<Role> roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        roles = await RoleService.GetAll();
+        loading = false;
+    }
+
+    public void OptionClickEvent(string values, MouseEventArgs evnt)
+    {
+        myHolder.Add(values);
+    }
 
     private async void OnValidSubmit()
     {
         loading = true;
         try
         {
+            model.Roles = myHolder;
             await AccountService.Register(model);
             AlertService.Success("Пользователь успешно добавлен", keepAfterRouteChange: true);
             NavigationManager.NavigateTo("users");
