@@ -1,5 +1,6 @@
 dotnet watch run
 Add-Migration Initial -context DataContext
+Update-Database
 professorweb.ru
 metanit.com
 

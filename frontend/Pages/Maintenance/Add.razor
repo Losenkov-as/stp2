@@ -1,0 +1,117 @@
+﻿@page "/maintenance/add"
+@attribute [Authorize]
+@inject IAlertService AlertService
+@inject IAccountService AccountService
+@inject IRoleService RoleService
+@inject NavigationManager NavigationManager
+
+<h1>Добавить пользователя</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Фамилия</label>
+            <InputText @bind-Value="model.LastName" class="form-control" />
+            <ValidationMessage For="@(() => model.LastName)" />
+        </div>
+        <div class="form-group col">
+            <label>Имя</label>
+            <InputText @bind-Value="model.FirstName" class="form-control" />
+            <ValidationMessage For="@(() => model.FirstName)" />
+        </div>
+        <div class="form-group col">
+            <label>Отчество</label>
+            <InputText @bind-Value="model.Patronymic" class="form-control" />
+            <ValidationMessage For="@(() => model.Patronymic)" />
+        </div>
+
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Подразделение</label>
+            <InputText @bind-Value="model.Department" class="form-control" />
+            <ValidationMessage For="@(() => model.Department)" />
+        </div>
+        <div class="form-group col">
+            <label>Должность</label>
+            <InputText @bind-Value="model.Position" class="form-control" />
+            <ValidationMessage For="@(() => model.Position)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Имя пользователя</label>
+            <InputText @bind-Value="model.Username" class="form-control" />
+            <ValidationMessage For="@(() => model.Username)" />
+        </div>
+        <div class="form-group col">
+            <label>Пароль</label>
+            <InputText @bind-Value="model.Password" type="password" class="form-control" />
+            <ValidationMessage For="@(() => model.Password)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Роли</label>
+            <select multiple class="form-select">
+                @if (roles != null)
+                {
+                    @foreach (var item in roles)
+                    {
+                        <option value="@item.Id" @onclick=@((e) => OptionClickEvent(@item.Id,e))>@item.Name</option>
+                    } 
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Сохранить
+        </button>
+        <NavLink href="users" class="btn btn-link">Отмена</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    private List<string> myHolder = new List<string>();
+
+    private AddUser model = new AddUser();
+    private bool loading;
+
+    private IList<Role> roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        roles = await RoleService.GetAll();
+        loading = false;
+    }
+
+    public void OptionClickEvent(string values, MouseEventArgs evnt)
+    {
+        myHolder.Add(values);
+    }
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            model.Roles = myHolder;
+            await AccountService.Register(model);
+            AlertService.Success("Пользователь успешно добавлен", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("users");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

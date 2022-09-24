@@ -62,7 +62,7 @@ namespace BlazorApp.Services
             await _httpService.Put($"/locations/{id}", model);
 
             // update stored Location if the logged in Location updated their own record
-            if (id == Location.Id) 
+            if (id == Location.Id.ToString()) 
             {
                 // update local storage
                 Location.Build = model.Build;

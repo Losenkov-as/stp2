@@ -68,11 +68,34 @@ namespace WebApi.Services
             if (_context.Users.Any(x => x.Username == model.Username))
                 throw new AppException("Имя пользователя '" + model.Username + "' уже существует");
 
-            // map model to new user object
-            var user = _mapper.Map<User>(model);
+            //// map model to new user object
 
-            // hash password
-            user.PasswordHash = BCryptNet.HashPassword(model.Password);
+            //var user = _mapper.Map<User>(model);
+
+            //// hash password
+            //user.PasswordHash = BCryptNet.HashPassword(model.Password);
+
+            //// save user
+            //_context.Users.Add(user);
+            //_context.SaveChanges();
+            List<Role> roles = new List<Role>();
+
+            if (model.Roles != null)
+                foreach (string r in model.Roles)
+                    roles.Add(_context.Roles.Where(role => role.Id == int.Parse(r)).FirstOrDefault());
+
+
+            // map model to new user object
+            //var user = _mapper.Map<User>(model);
+            User user = new User
+            {
+                Username = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Patronymic = model.Patronymic,
+                PasswordHash = BCryptNet.HashPassword(model.Password),
+                Roles = roles
+            };
 
             // save user
             _context.Users.Add(user);

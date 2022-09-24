@@ -25,7 +25,7 @@ namespace WebApi.Models.Users
         public string Position { get; set; }
 
         [Required]
-        public ICollection<Role> Roles { get; set; }
+        public List<string> Roles { get; set; }
 
         [Required]
         public string Password { get; set; }

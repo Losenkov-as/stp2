@@ -10,7 +10,7 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220905082507_Initial")]
+    [Migration("20220924171316_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,7 +193,7 @@ namespace WebApi.Migrations
                         .HasForeignKey("MachineId");
 
                     b.HasOne("WebApi.Entities.Status", "Status")
-                        .WithMany()
+                        .WithMany("Maintenances")
                         .HasForeignKey("StatusId");
 
                     b.HasOne("WebApi.Entities.User", "User")
@@ -215,6 +215,11 @@ namespace WebApi.Migrations
                 });
 
             modelBuilder.Entity("WebApi.Entities.Machine", b =>
+                {
+                    b.Navigation("Maintenances");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Status", b =>
                 {
                     b.Navigation("Maintenances");
                 });

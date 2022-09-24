@@ -23,6 +23,7 @@ namespace BlazorApp
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<IStatusService, StatusService>()
                 .AddScoped<IMachineService, MachineService>()
+                .AddScoped<IMaintenanceService, MaintenanceService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             // configure http client

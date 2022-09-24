@@ -15,8 +15,9 @@ namespace WebApi.Entities
 
         [JsonIgnore]
         public string PasswordHash { get; set; }
-        public ICollection<Role> Roles { get; set; }
-        public ICollection<Maintenance> Maintenances { get; set; }
+        public List<Role> Roles { get; set; }
+        [JsonIgnore]
+        public List<Maintenance> Maintenances { get; set; }
 
 
     }
