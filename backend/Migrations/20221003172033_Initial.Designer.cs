@@ -10,7 +10,7 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220924171316_Initial")]
+    [Migration("20221003172033_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,12 @@ namespace WebApi.Migrations
                     b.Property<string>("Room")
                         .HasColumnType("text");
 
+                    b.Property<int?>("userId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Locations");
                 });
@@ -180,6 +185,15 @@ namespace WebApi.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Location", b =>
+                {
+                    b.HasOne("WebApi.Entities.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Maintenance", b =>

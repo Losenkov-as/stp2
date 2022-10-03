@@ -88,8 +88,8 @@ namespace WebApi
 
 
             //{
-            //    var role1 = new Role { Name = "Администратор"};
-            //    var role2 = new Role { Name = "Пользователь"};
+            //    var role1 = new Role { Name = "Администратор" };
+            //    var role2 = new Role { Name = "Пользователь" };
             //    var users = new List<User>
             //    {
 

@@ -9,6 +9,7 @@
         <tr>
             <th scope="col">Помещение</th>
             <th scope="col">Здание</th>
+            <th scope="col">Сотрудник</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -17,35 +18,37 @@
         {
             foreach (var location in locations)
             {
-                <tr>
-                    <td>@location.Room</td>
-                    <td>@location.Build</td>
-                    
-                    @*<td>
-                        @foreach (Location role in user.roles)
-                        {
-                            if (user.roles.ToArray().Length > 1)
-                                @string.Concat(role.Name, ", ")
-                                else
-                                    @role.Name;
+        <tr>
+            <td>@location.Room</td>
+            <td>@location.Build</td>
+            <td>@location.User.Username</td>
+            @*<td>
+            @foreach (Location role in user.roles)
+            {
+                if (user.roles.ToArray().Length > 1)
+                    @string.Concat(role.Name, ", ")
+                    else
+                        @role.Name;
 
-                                }
-                    </td>*@
+                    }
 
-                    <td style="white-space: nowrap">
-                        <NavLink href="@($"locations/edit/{location.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
-                        <button @onclick="@(() => DeleteLocation(location.Id))" disabled="@location.IsDeleting" class="btn btn-sm btn-danger ">
-                            @if (location.IsDeleting)
-                            {
-                                <span class="spinner-border spinner-border-sm"></span>
-                            }
-                            else
-                            {
-                                <span>Удалить</span>
-                            }
-                        </button>
-                    </td>
-                </tr>
+
+        </td>*@
+
+            <td style="white-space: nowrap">
+                <NavLink href="@($"locations/edit/{location.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
+                <button @onclick="@(() => DeleteLocation(location.Id))" disabled="@location.IsDeleting" class="btn btn-sm btn-danger ">
+                    @if (location.IsDeleting)
+                    {
+                        <span class="spinner-border spinner-border-sm"></span>
+                    }
+                    else
+                    {
+                        <span>Удалить</span>
+                    }
+                </button>
+            </td>
+        </tr>
             }
         }
         @if (loading)
@@ -62,11 +65,16 @@
 @code {
     private bool loading;
     private IList<Location> locations;
+    //private User user_to_show = new User();
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
         locations = await LocationService.GetAll();
+        //foreach (Location location in locations)
+        //{
+        //    location.User = AccountService.GetById(location.User.Id);
+        //}
         loading = false;
     }
 

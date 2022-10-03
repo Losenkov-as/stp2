@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("create")]
         public IActionResult Register(RegisterRequest model)
         {
             _maintenanceService.Register(model);

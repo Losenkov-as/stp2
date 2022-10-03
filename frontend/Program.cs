@@ -57,6 +57,9 @@ namespace BlazorApp
             var statusService = host.Services.GetRequiredService<IStatusService>();
             await statusService.Initialize();
 
+            var maintenanceService = host.Services.GetRequiredService<IMaintenanceService>();
+            await maintenanceService.Initialize();
+
             await host.RunAsync();
         }
     }

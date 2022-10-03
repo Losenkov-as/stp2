@@ -21,11 +21,11 @@ namespace BlazorApp.Models.Account
 
         public EditMaintenance(Maintenance maintenance)
         {
-            DateOfUpdate = maintenance.DateOfUpdate;
-            Machine = maintenance.Machine;
-            Status = maintenance.Status;
-            Location = maintenance.Location;
-            User = maintenance.User;
+            //DateOfUpdate = maintenance.DateOfUpdate;
+            //Machine = maintenance.Machine;
+            //Status = maintenance.Status;
+            //Location = maintenance.Location;
+            //User = maintenance.User;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿@page "/locations/add"
+﻿@using Microsoft.AspNetCore.Components.Web
+@page "/locations/add"
 @inject IAlertService AlertService
 @inject IAccountService AccountService
 @inject ILocationService LocationService
 @inject NavigationManager NavigationManager
+
 
 <h1>Добавить местоположение</h1>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
@@ -18,24 +20,41 @@
             <InputText @bind-Value="model.Build" class="form-control" />
             <ValidationMessage For="@(() => model.Build)" />
         </div>
-   
+        <div class="form-group col">
+            <br>
+            <label>Табельный номер сотрудника</label>
+            <select @bind="model.User" class="form-select">
+                @if (users != null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <option @key="user.Id" value="@user.Id">@user.Id</option>
+                    }
+                }
+            </select>
 
+        </div>
     </div>
-    
+
     <div class="form-group">
         <button disabled="@loading" class="btn btn-primary">
             @if (loading)
             {
                 <span class="spinner-border spinner-border-sm mr-1"></span>
+
             }
             Сохранить
         </button>
         <NavLink href="locations" class="btn btn-link">Отмена</NavLink>
     </div>
+
 </EditForm>
 
 @code {
-    private AddLocation model = new AddLocation();
+    public AddLocation model = new AddLocation();
+    public int myHolder;
+    private IList<User> users;
+
     private bool loading;
 
     private async void OnValidSubmit()
@@ -53,5 +72,12 @@
             loading = false;
             StateHasChanged();
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        users = await AccountService.GetAll();
+        loading = false;
     }
 }

@@ -9,7 +9,7 @@ namespace BlazorApp.Services
     public interface ILocationService
     {
         Location Location { get; }
-        Task Initialize();
+        //Task Initialize();
         Task Create(AddLocation model);
         Task<IList<Location>> GetAll();
         Task<Location> GetById(string id);
@@ -36,10 +36,10 @@ namespace BlazorApp.Services
             _localStorageService = localStorageService;
         }
 
-        public async Task Initialize()
-        {
-            Location = await _localStorageService.GetItem<Location>(_locationKey);
-        }
+        //public async Task Initialize()
+        //{
+        //    Location = await _localStorageService.GetItem<Location>(_locationKey);
+        //}
 
 
         public async Task Create(AddLocation model)

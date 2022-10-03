@@ -41,7 +41,7 @@
 
                     <td style="white-space: nowrap">
                         <NavLink href="@($"maintenances/edit/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>
-                        <button @onclick="@(() => DeleteUser(maintenance.Id))" disabled="@maintenance.IsDeleting" class="btn btn-sm btn-danger ">
+                        <button @onclick="@(() => DeleteMaintenance(maintenance.Id))" disabled="@maintenance.IsDeleting" class="btn btn-sm btn-danger ">
                             @if (maintenance.IsDeleting)
                             {
                                 <span class="spinner-border spinner-border-sm"></span>
@@ -77,11 +77,11 @@
         loading = false;
     }
 
-    private async void DeleteUser(string id)
+    private async void DeleteMaintenance(string id)
     {
         var maintenance = maintenances.First(x => x.Id == id);
         maintenance.IsDeleting = true;
-        await AccountService.Delete(id);
+        await MaintenanceService.Delete(id);
         maintenances.Remove(maintenance);
         StateHasChanged();
     }

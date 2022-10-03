@@ -14,6 +14,9 @@ namespace WebApi.Helpers
             // RegisterRequest -> User
             CreateMap<RegisterRequest, User>();
 
+            CreateMap<WebApi.Models.Locations.RegisterRequest, Location>(); // Вот этот прикол не нужен по идее
+
+            CreateMap<WebApi.Models.Machines.RegisterRequest, Machine>();
             // UpdateRequest -> User
             CreateMap<UpdateRequest, User>()
                 .ForAllMembers(x => x.Condition(

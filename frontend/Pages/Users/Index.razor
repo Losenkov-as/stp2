@@ -12,8 +12,6 @@
             <th scope="col">Имя</th>
             <th scope="col">Отчество</th>
             <th scope="col">Имя пользователя</th>
-            <th scope="col">Подразделение</th>
-            <th scope="col">Должность</th>
             <th scope="col">Роли</th>
             <th scope="col"></th>
         </tr>
@@ -28,8 +26,8 @@
                     <td>@user.FirstName</td>
                     <td>@user.Patronymic</td>
                     <td>@user.Username</td>
-                    <td>@user.Department</td>
-                    <td>@user.Position</td>
+                    @*<td>@user.Department</td>
+                    <td>@user.Position</td>*@
                     <td>
                         @foreach (Role role in user.Roles)
                         {

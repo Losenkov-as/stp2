@@ -51,8 +51,7 @@ namespace WebApi.Services
 
         public IEnumerable<Location> GetAll()
         {
-
-            return _context.Locations.ToList();
+            return _context.Locations.Include(l => l.user);
         }
 
         public Location GetById(int id)
@@ -67,7 +66,20 @@ namespace WebApi.Services
                 throw new AppException("Помещение '" + model.Room + "' уже существует");
             
             // map model to new user object
-            var location = _mapper.Map<Location>(model);
+
+            User user = null;
+
+            user = _context.Users.Where(user => user.Id == model.User).FirstOrDefault();
+
+
+            // map model to new user object
+            //var user = _mapper.Map<User>(model);
+            Location location = new Location
+            {
+                Room = model.Room,
+                Build = model.Build,
+                user = user
+            };
 
             _context.Locations.Add(location);
             _context.SaveChanges();
@@ -78,8 +90,8 @@ namespace WebApi.Services
             var location = getLocation(id);
 
             //// validate                                                                                    Жена занимается сексом с 3 муужиками, тут
-            if (model.Room != location.Room && _context.Locations.Any(x => x.Room == model.Room))           // приходит муж. Жена достаёт черные мешки и пакует туда
-                throw new AppException("Username '" + model.Room + "' is already taken");                //любовников. 
+            if (model.Room != location.Room && _context.Locations.Any(x => x.Room == model.Room))            // приходит муж. Жена достаёт черные мешки и пакует туда
+                throw new AppException("Username '" + model.Room + "' is already taken");                    //любовников. 
             //                                                                                               Муж: что это за мешки?                                                                                                             
             //                                                                                               Жена: мама с дачи гостинцы привезла
             //                                                                                               Муж пнул один мешок и слышит "Беее"

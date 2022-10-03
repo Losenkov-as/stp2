@@ -92,6 +92,7 @@ namespace BlazorApp.Services
         {
             var request = new HttpRequestMessage(method, uri);
             if (value != null)
+
                 request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             return request;
         }

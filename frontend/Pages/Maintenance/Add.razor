@@ -1,70 +1,102 @@
 ﻿@page "/maintenance/add"
 @attribute [Authorize]
+@inject NavigationManager NavigationManager
 @inject IAlertService AlertService
 @inject IAccountService AccountService
 @inject IRoleService RoleService
-@inject NavigationManager NavigationManager
+@inject IMachineService MachineService
+@inject IStatusService StatusService
+@inject ILocationService LocationService
+@inject IMaintenanceService MaintenanceService
 
-<h1>Добавить пользователя</h1>
+<h1>Создание записи</h1>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
-    <div class="form-row">
-        <div class="form-group col">
-            <label>Фамилия</label>
-            <InputText @bind-Value="model.LastName" class="form-control" />
-            <ValidationMessage For="@(() => model.LastName)" />
-        </div>
-        <div class="form-group col">
-            <label>Имя</label>
-            <InputText @bind-Value="model.FirstName" class="form-control" />
-            <ValidationMessage For="@(() => model.FirstName)" />
-        </div>
-        <div class="form-group col">
-            <label>Отчество</label>
-            <InputText @bind-Value="model.Patronymic" class="form-control" />
-            <ValidationMessage For="@(() => model.Patronymic)" />
-        </div>
 
-
-    </div>
     <div class="form-row">
         <div class="form-group col">
-            <label>Подразделение</label>
-            <InputText @bind-Value="model.Department" class="form-control" />
-            <ValidationMessage For="@(() => model.Department)" />
-        </div>
-        <div class="form-group col">
-            <label>Должность</label>
-            <InputText @bind-Value="model.Position" class="form-control" />
-            <ValidationMessage For="@(() => model.Position)" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col">
-            <label>Имя пользователя</label>
-            <InputText @bind-Value="model.Username" class="form-control" />
-            <ValidationMessage For="@(() => model.Username)" />
-        </div>
-        <div class="form-group col">
-            <label>Пароль</label>
-            <InputText @bind-Value="model.Password" type="password" class="form-control" />
-            <ValidationMessage For="@(() => model.Password)" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col">
-            <label>Роли</label>
-            <select multiple class="form-select">
-                @if (roles != null)
+            <br>
+            <label>Выберите номер станка</label>
+            <select  @bind="model.Machine" class="form-select">
+                @if (machines != null)
                 {
-                    @foreach (var item in roles)
+                    @foreach (var machine in machines)
                     {
-                        <option value="@item.Id" @onclick=@((e) => OptionClickEvent(@item.Id,e))>@item.Name</option>
-                    } 
+                        <option  @key="machine.Id" value="@machine.Id" >@machine.InventoryNumber</option>
+                    }
                 }
             </select>
+
+        </div>
+         <div class="form-group col">
+             <br>
+             <label>Выберите новое состояние станка</label>
+             <select @bind="model.Status" class="form-select">
+                 @if (statuses != null)
+                 {
+                     @foreach (var status in statuses)
+                     {
+                         <option @key="status.Id" value="@status.Id">@status.Name</option>
+                     }
+                 }
+             </select>
+         </div>
+            <div class="form-group col">
+                <br>
+                <label>Выберите номер цеха</label>
+                <select  @bind="model.Location" class="form-select">
+                    @if (users != null)
+                    {
+                        @foreach (var location in locations)
+                        {
+                            <option  @key="location.Id" value="@location.Id" >@location.Build / @location.Room</option>
+                        }
+                    }
+                </select>
+
+            </div>
+            <div class="form-group col">
+                <br>
+                <label>Табельный номер сотрудника</label>
+                <select @bind="model.User" class="form-select">
+                    @if (users != null)
+                    {
+                        @foreach (var user in users)
+                        {
+                            <option @key="user.Id" value="@user.Id" >@user.Id</option>
+                        }
+                    }
+                </select>
+
+            </div>
+
+
+
+
+    </div>
+    @*<div class="form-row">
+        <div class="form-group col">
+            <label>станок</label>
+            <InputText @bind-Value="model.Machine" class="form-control" />
+            <ValidationMessage For="@(() => model.Machine)" />
+        </div>
+        <div class="form-group col">
+            <label>Сотрудник</label>
+            <InputText @bind-Value="model.User" class="form-control" />
+            <ValidationMessage For="@(() => model.User)" />
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Местоположение</label>
+            <InputText @bind-Value="model.Location" class="form-control" />
+            <ValidationMessage For="@(() => model.Location)" />
+        </div>
+        <div class="form-group col">
+            <label>Новое состояние</label>
+            <InputText @bind-Value="model.Status" class="form-control" />
+            <ValidationMessage For="@(() => model.Status)" />
+        </div>
+    </div>*@
     <div class="form-group">
         <button disabled="@loading" class="btn btn-primary">
             @if (loading)
@@ -73,39 +105,44 @@
             }
             Сохранить
         </button>
-        <NavLink href="users" class="btn btn-link">Отмена</NavLink>
+        <NavLink href="maintenance" class="btn btn-link">Отмена</NavLink>
     </div>
+
 </EditForm>
 
 @code {
-    private List<string> myHolder = new List<string>();
+    private string myHolderStatus, myHolderUser, myHolderMachine, myHolderLocation;
 
-    private AddUser model = new AddUser();
+    public AddMaintenance model = new AddMaintenance();
+
     private bool loading;
 
-    private IList<Role> roles;
+    public IList<User> users;
+    public IList<Location> locations;
+    public IList<Machine> machines;
+    public IList<Status> statuses;
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-        roles = await RoleService.GetAll();
+        statuses = await StatusService.GetAll();
+        users = await AccountService.GetAll();
+        machines = await MachineService.GetAll();
+        locations = await LocationService.GetAll();
+
         loading = false;
     }
 
-    public void OptionClickEvent(string values, MouseEventArgs evnt)
-    {
-        myHolder.Add(values);
-    }
 
-    private async void OnValidSubmit()
+    public async void OnValidSubmit()
     {
         loading = true;
         try
         {
-            model.Roles = myHolder;
-            await AccountService.Register(model);
-            AlertService.Success("Пользователь успешно добавлен", keepAfterRouteChange: true);
-            NavigationManager.NavigateTo("users");
+
+            await MaintenanceService.Create(model);
+            AlertService.Success("Запись успешно добавлена", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("maintenance");
         }
         catch (Exception ex)
         {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using WebApi.Entities;
 
 namespace WebApi.Models.Locations
 {
@@ -9,6 +10,8 @@ namespace WebApi.Models.Locations
 
         [Required]
         public string Build { get; set; }
-
+        
+        [Required]
+        public int User { get; set; }
     }
 }

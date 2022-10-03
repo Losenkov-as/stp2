@@ -8,6 +8,7 @@ using WebApi.Helpers;
 using WebApi.Models.Maintenance;
 
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace WebApi.Services
 {
@@ -88,15 +89,12 @@ namespace WebApi.Services
 
             Maintenance maintenance = new Maintenance
             {
-                DateOfUpdate = model.DateOfUpdate,
+                DateOfUpdate = DateTime.Now,
                 Status = status,
                 Machine = machine,
                 Location = location,
                 User = user
             };
-
-
-
 
             // save Maintenance
             _context.Maintenances.Add(maintenance);

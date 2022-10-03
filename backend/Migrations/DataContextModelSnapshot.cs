@@ -47,7 +47,12 @@ namespace WebApi.Migrations
                     b.Property<string>("Room")
                         .HasColumnType("text");
 
+                    b.Property<int?>("userId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Locations");
                 });
@@ -178,6 +183,15 @@ namespace WebApi.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Location", b =>
+                {
+                    b.HasOne("WebApi.Entities.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Maintenance", b =>

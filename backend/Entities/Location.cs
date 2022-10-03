@@ -11,6 +11,8 @@ namespace WebApi.Entities
         public int Id { get; set; }
         public string Room { get; set; }
         public string Build { get; set; }                   //мб лучше так: public ICollection<User> Users { get; set; } 
+        public User user { get; set; }
+
         [JsonIgnore]
         public List<Maintenance> Maintenances { get; set; }
     }

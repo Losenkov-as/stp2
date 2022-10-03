@@ -1,4 +1,4 @@
-﻿@page "/mocations/add"
+﻿@page "/machines/add"
 @inject IAlertService AlertService
 @inject IAccountService AccountService
 @inject IMachineService MachineService
@@ -13,7 +13,6 @@
             <InputText @bind-Value="model.InventoryNumber" class="form-control" />
             <ValidationMessage For="@(() => model.InventoryNumber)" />
         </div>
-
     </div>
     
     <div class="form-group">

@@ -7,10 +7,6 @@ namespace WebApi.Models.Maintenance
 {
     public class RegisterRequest
     {
-        [Required]
-        public string Id { get; set; }
-
-        [Required]
         public DateTime DateOfUpdate { get; set; }
         [Required]
         public string Machine { get; set; }
