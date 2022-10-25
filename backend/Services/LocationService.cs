@@ -51,7 +51,7 @@ namespace WebApi.Services
 
         public IEnumerable<Location> GetAll()
         {
-            return _context.Locations.Include(l => l.user);
+            return _context.Locations.Include(l => l.User);
         }
 
         public Location GetById(int id)
@@ -78,7 +78,7 @@ namespace WebApi.Services
             {
                 Room = model.Room,
                 Build = model.Build,
-                user = user
+                User = user
             };
 
             _context.Locations.Add(location);
@@ -99,8 +99,16 @@ namespace WebApi.Services
             //                                                                                               Пнул второй мешок и слышит "Хрюююю"   
             //                                                                                               Муж: свинья, отлично - сало замаринуем   
             //                                                                                               Пнул третий мешок - тишина, пнул ещё раз - тишина, пнул со всей силы
-            // copy model to user and save                                                                   Мешок: ты чё блять тупой? картошка я!               
-            _mapper.Map(model, location);
+            // copy model to user and save                                                                   Мешок: ты чё блять тупой? картошка я!    
+            User user = null;
+            user = _context.Users.Where(user => user.Id == model.User).FirstOrDefault();
+
+            location.Build = model.Build;
+            location.Room = model.Room;
+
+            location.User = user;
+
+
             _context.Locations.Update(location);
             _context.SaveChanges();
         }
@@ -116,7 +124,8 @@ namespace WebApi.Services
 
         private Location getLocation(int id)
         {
-            var location = _context.Locations.Find(id);
+            var location = _context.Locations.FirstOrDefault(u => u.Id == id); // .FirstOrDefault(u => u.Id == id);
+            location.User = _context.Users.FirstOrDefault(u => u.Id == location.UserId);
             if (location == null) throw new KeyNotFoundException("Местоположение не найдено");
             return location;
         }

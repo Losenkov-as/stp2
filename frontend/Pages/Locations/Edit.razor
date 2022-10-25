@@ -11,14 +11,31 @@
         <DataAnnotationsValidator />
         <div class="form-row">
             <div class="form-group col">
-                <label>First Name</label>
+                <label>Здание</label>
+                <InputText @bind-Value="model.Build" class="form-control" />
+                <ValidationMessage For="@(() => model.Build)" />
+            </div>
+
+            <div class="form-group col">
+                <label>Помещение</label>
                 <InputText @bind-Value="model.Room" class="form-control" />
                 <ValidationMessage For="@(() => model.Room)" />
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group col">
-                <label>Last Name</label>
-                <InputText @bind-Value="model.Build" class="form-control" />
-                <ValidationMessage For="@(() => model.Build)" />
+                <br>
+                <label>Табельный номер сотрудника</label>
+                <select @bind="model.User" class="form-select">
+                    @if (users != null)
+                    {
+                        @foreach (var user in users)
+                        {
+                            <option @key="user.Id" value="@user.Id">@user.Username</option>
+                        }
+                    }
+                </select>
+        
             </div>
         </div>
         
@@ -30,7 +47,7 @@
                 }
                 Save
             </button>
-            <NavLink href="users" class="btn btn-link">Cancel</NavLink>
+            <NavLink href="locations" class="btn btn-link">Cancel</NavLink>
         </div>
     </EditForm>
 }
@@ -44,14 +61,19 @@ else
 @code {
     private EditLocation model;
     private bool loading;
+    private IList<User> users;
+    public Location location = null;
 
     [Parameter]
     public string Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var location = await LocationService.GetById(Id);
+        loading = true;
+        users = await AccountService.GetAll();
+        location = await LocationService.GetById(Id);
         model = new EditLocation(location);
+        loading = false;
     }
 
     private async void OnValidSubmit()
