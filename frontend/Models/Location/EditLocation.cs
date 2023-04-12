@@ -5,8 +5,8 @@ namespace BlazorApp.Models.Account
     public class EditLocation
     {
         [Required]
-        public string Room { get; set; }
-        public string Build { get; set; }
+        public string Plot { get; set; }
+        public string Workshop { get; set; }
 
         //[Required]
         public string User { get; set; }
@@ -14,8 +14,8 @@ namespace BlazorApp.Models.Account
 
         public EditLocation(Location location)
         {
-            Room = location.Room;
-            Build = location.Build;
+            Plot = location.Plot;
+            Workshop = location.Workshop;
             User = location.User.Id;
         }
     }

@@ -36,6 +36,7 @@ namespace WebApi.Controllers
         //}
 
         [AllowAnonymous]
+
         [HttpPost("create")]
         public IActionResult Register(RegisterRequest model)                    // Если называется регистрация а по факту добавление всё гуд?
         {

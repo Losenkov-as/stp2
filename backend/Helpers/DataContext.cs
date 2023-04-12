@@ -22,6 +22,10 @@ namespace WebApi.Helpers
 
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Build> Builds { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<MachineModel> MachineModels { get; set; }
+        public DbSet<MachineType> MachineTypes { get; set; }
         public DbSet<Machine> Machines { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Location> Locations { get; set; }

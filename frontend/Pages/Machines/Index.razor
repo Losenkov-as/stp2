@@ -2,6 +2,10 @@
 @inject IAccountService AccountService
 @inject IStatusService StatusService
 @inject IMachineService MachineService
+@inject IRoomService RoomService
+@inject IMachineModelService MachineModelService
+@inject IMachineTypeService MachineTypeService
+@inject IBuildService BuildService
 
 
 <h1>Станки</h1>
@@ -10,6 +14,10 @@
     <thead>
         <tr>
             <th scope="col">Инвентарный номер</th>
+            <th scope="col">Здание</th>
+            <th scope="col">помещение</th>
+            <th scope="col">Тип станка</th>
+            <th scope="col">Модель станка</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -18,35 +26,38 @@
         {
             foreach (var machine in machines)
             {
-        <tr>
-            <td>@machine.InventoryNumber</td>
+                <tr>
+                    <td>@machine.InventoryNumber</td>
+                    <td>@machine.room.Build.Name</td>
+                    <td>@machine.room.Name</td>
+                    <td>@machine.machinemodel.machinetype.Name</td>
+                    <td>@machine.machinemodel.Name</td>
+                    
+                    @*<td>
+                            @foreach (Role role in user.roles)
+                            {
+                                if (user.roles.ToArray().Length > 1)
+                                    @string.Concat(role.Name, ", ")
+                                    else
+                                        @role.Name;
 
-          
-            @*<td>
-            @foreach (Role role in user.roles)
-            {
-                if (user.roles.ToArray().Length > 1)
-                    @string.Concat(role.Name, ", ")
-                    else
-                        @role.Name;
+                                    }
+                        </td>*@
 
-                    }
-        </td>*@
-
-            <td style="white-space: nowrap">
-                @*<NavLink href="@($"machines/edit/{machine.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
-                <button @onclick="@(() => DeleteMachine(machine.Id))" disabled="@machine.IsDeleting" class="btn btn-sm btn-danger ">
-                    @if (machine.IsDeleting)
-                    {
-                        <span class="spinner-border spinner-border-sm"></span>
-                    }
-                    else
-                    {
-                        <span>Удалить</span>
-                    }
-                </button>
-            </td>
-        </tr>
+                    <td style="white-space: nowrap">
+                        @*<NavLink href="@($"machines/edit/{machine.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
+                        <button @onclick="@(() => DeleteMachine(machine.Id))" disabled="@machine.IsDeleting" class="btn btn-sm btn-danger ">
+                            @if (machine.IsDeleting)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            else
+                            {
+                                <span>Удалить</span>
+                            }
+                        </button>
+                    </td>
+                </tr>
             }
         }
         @if (loading)
@@ -63,13 +74,24 @@
 @code {
     private bool loading;
     private IList<Machine> machines;
+    public IList<MachineType> machinetypes;
+    public IList<Build> builds;
+    public IList<MachineModel> machinemodels;
+    public IList<Room> rooms;
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
+
+        machinetypes = await MachineTypeService.GetAll();
         machines = await MachineService.GetAll();
+        builds = await BuildService.GetAll();
+        rooms = await RoomService.GetAll();
+        machinemodels = await MachineModelService.GetAll();
         loading = false;
     }
+
+
 
     private async void DeleteMachine(string id)
     {

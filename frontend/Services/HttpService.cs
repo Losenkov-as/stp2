@@ -86,8 +86,6 @@ namespace BlazorApp.Services
             return await sendRequest<T>(request);
         }
 
-        // helper methods
-
         private HttpRequestMessage createRequest(HttpMethod method, string uri, object value = null)
         {
             var request = new HttpRequestMessage(method, uri);
@@ -96,7 +94,6 @@ namespace BlazorApp.Services
                 request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             return request;
         }
-
         private async Task sendRequest(HttpRequestMessage request)
         {
             await addJwtHeader(request);
@@ -104,7 +101,6 @@ namespace BlazorApp.Services
             // send request
             using var response = await _httpClient.SendAsync(request);
 
-            // auto logout on 401 response
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 _navigationManager.NavigateTo("account/logout");

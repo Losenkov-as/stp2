@@ -9,7 +9,7 @@ namespace BlazorApp.Services
     public interface ILocationService
     {
         Location Location { get; }
-        //Task Initialize();
+        Task Initialize();
         Task Create(AddLocation model);
         Task<IList<Location>> GetAll();
         Task<Location> GetById(string id);
@@ -36,10 +36,10 @@ namespace BlazorApp.Services
             _localStorageService = localStorageService;
         }
 
-        //public async Task Initialize()
-        //{
-        //    Location = await _localStorageService.GetItem<Location>(_locationKey);
-        //}
+        public async Task Initialize()
+        {
+            Location = await _localStorageService.GetItem<Location>(_locationKey);
+        }
 
 
         public async Task Create(AddLocation model)
@@ -65,8 +65,8 @@ namespace BlazorApp.Services
             if (id == Location.Id.ToString()) 
             {
                 // update local storage
-                Location.Build = model.Build;
-                Location.Room = model.Room;
+                Location.Workshop = model.Workshop;
+                Location.Plot = model.Plot;
                 await _localStorageService.SetItem(_locationKey, Location);
             }
         }

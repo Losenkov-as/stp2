@@ -48,7 +48,7 @@ namespace WebApi.Services
         {
             // validate
             if (_context.Roles.Any(x => x.Name == model.Name))
-                throw new AppException("Наименование '" + model.Name + "' уже существует");
+                throw new AppException("Роль '" + model.Name + "' уже существует");
 
             // map model to new Role object
             var Role = _mapper.Map<Role>(model);

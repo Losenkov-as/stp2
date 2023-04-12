@@ -62,8 +62,8 @@ namespace WebApi.Services
         public void Register(RegisterRequest model)
         {
             // validate
-            if ((_context.Locations.Any(x => x.Room == model.Room)) || (_context.Locations.Any(x => x.Build == model.Build))) //  ТУТ СТОИТ ПОДУМАТЬ
-                throw new AppException("Помещение '" + model.Room + "' уже существует");
+            if ((_context.Locations.Any(x => x.Plot == model.Plot)) || (_context.Locations.Any(x => x.Workshop == model.Workshop))) //  ТУТ СТОИТ ПОДУМАТЬ
+                throw new AppException("Помещение '" + model.Plot + "' уже существует");
             
             // map model to new user object
 
@@ -76,8 +76,8 @@ namespace WebApi.Services
             //var user = _mapper.Map<User>(model);
             Location location = new Location
             {
-                Room = model.Room,
-                Build = model.Build,
+                Plot = model.Plot,
+                Workshop = model.Workshop,
                 User = user
             };
 
@@ -90,7 +90,7 @@ namespace WebApi.Services
             var location = getLocation(id);
 
             //// validate                                                                                    Жена занимается сексом с 3 муужиками, тут
-            if (model.Room != location.Room && _context.Locations.Any(x => x.Room == model.Room))            // приходит муж. Жена достаёт черные мешки и пакует туда
+            if (model.Room != location.Plot && _context.Locations.Any(x => x.Plot == model.Room))            // приходит муж. Жена достаёт черные мешки и пакует туда
                 throw new AppException("Username '" + model.Room + "' is already taken");                    //любовников. 
             //                                                                                               Муж: что это за мешки?                                                                                                             
             //                                                                                               Жена: мама с дачи гостинцы привезла
@@ -103,8 +103,8 @@ namespace WebApi.Services
             User user = null;
             user = _context.Users.Where(user => user.Id == model.User).FirstOrDefault();
 
-            location.Build = model.Build;
-            location.Room = model.Room;
+            location.Workshop = model.Build;
+            location.Plot = model.Room;
 
             location.User = user;
 

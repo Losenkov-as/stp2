@@ -44,7 +44,7 @@ namespace WebApi.Services
             // validate
             if (user == null || !BCryptNet.Verify(model.Password, user.PasswordHash))
                 throw new AppException("Имя пользователя или пароль введены неверно");
-
+            
             // authentication successful
             var response = _mapper.Map<AuthenticateResponse>(user);
             response.Token = _jwtUtils.GenerateToken(user);

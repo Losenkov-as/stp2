@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         public IActionResult Register(RegisterRequest model)
         {
             _maintenanceService.Register(model);
-            return Ok(new { message = "Registration successful" });
+            return Ok(new { message = "Регистрация успешна" });
         }
 
         [HttpGet]

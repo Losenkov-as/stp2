@@ -9,8 +9,8 @@
     <DataAnnotationsValidator />
     <div class="form-row">
         <div class="form-group col">
-            <label>Name</label>
-            <InputText @bind-Value="model.Name" class="form-control" />
+            <label>Название роли</label>
+            <InputText @bind-Value="model.Name"/>
             <ValidationMessage For="@(() => model.Name)" />
         </div>
     </div>

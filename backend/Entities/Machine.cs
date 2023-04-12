@@ -10,6 +10,11 @@ namespace WebApi.Entities
     {
         public int Id { get; set; }
         public string InventoryNumber { get; set; }
+        public MachineType MachineType { get; set; }
+        public Build Build { get; set; }
+        public Room Room { get; set; }
+        public MachineModel MachineModel { get; set; }
+
         [JsonIgnore]
         public List<Maintenance> Maintenances { get; set; }
 

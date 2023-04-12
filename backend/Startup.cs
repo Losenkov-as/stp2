@@ -51,7 +51,11 @@ namespace WebApi
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IBuildService, BuildService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IMachineTypeService, MachineTypeService>();
+            services.AddScoped<IMachineModelService, MachineModelService>();
             services.AddScoped<IMaintenanceService, MaintenanceService>();
             services.AddScoped<IMachineService, MachineService>();
         }

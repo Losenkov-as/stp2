@@ -1,0 +1,73 @@
+﻿@page "/rooms/add"
+@inject IAlertService AlertService
+@inject IAccountService AccountService
+@inject IBuildService BuildService
+@inject IRoomService RoomService
+@inject NavigationManager NavigationManager
+
+<h1>Добавить помещение</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group col">
+        <br>
+        <label>Выберите здание</label>
+        <select @bind="model.Build" class="form-select">
+            @if (builds != null)
+            {
+                @foreach (var build in builds)
+                {
+                    <option @key="build.Id" value="@build.Id">@build.Name</option>
+                }
+            }
+        </select>
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Номер помещения</label>
+            <InputText @bind-Value="model.Name" />
+            <ValidationMessage For="@(() => model.Name)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Сохранить
+        </button>
+        <NavLink href="Builds" class="btn btn-link">Отмена</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    private AddRoom model = new AddRoom();
+    public IList<Build> builds;
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await RoomService.Create(model);
+            AlertService.Success("Помещение успешно добавлено", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("builds");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        builds = await BuildService.GetAll();
+        loading = false;
+    }
+}

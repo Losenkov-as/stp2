@@ -9,17 +9,11 @@ namespace BlazorApp.Models.Account
         [Required]
         public string Id { get; set; }
         [Required]
-        public DateTime DateOfUpdate { get; set; }
+        public DateTime DateOfEnd { get; set; }
         [Required]
-        public Machine Machine { get; set; }
-        [Required]
-        public Status Status { get; set; }
-        [Required]
-        public Location Location { get; set; }
-        [Required]
-        public User User { get; set; }
-
-        public EditMaintenance(Maintenance maintenance)
+        public string User { get; set; }
+        
+        public EditMaintenance()
         {
             //DateOfUpdate = maintenance.DateOfUpdate;
             //Machine = maintenance.Machine;

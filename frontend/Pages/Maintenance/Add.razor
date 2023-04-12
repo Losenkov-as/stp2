@@ -15,59 +15,75 @@
     <div class="form-row">
         <div class="form-group col">
             <br>
-            <label>Выберите номер станка</label>
-            <select  @bind="model.Machine" class="form-select">
-                @if (machines != null)
+            <label>Выберите номер цеха</label>
+            <select @bind="model.Location" class="form-select">
+                @if (users != null)
                 {
-                    @foreach (var machine in machines)
+                    @foreach (var location in locations)
                     {
-                        <option  @key="machine.Id" value="@machine.Id" >@machine.InventoryNumber</option>
+                        <option @key="location.Id" value="@location.Id">@location.Workshop / @location.Plot</option>
                     }
                 }
             </select>
 
         </div>
-         <div class="form-group col">
-             <br>
-             <label>Выберите новое состояние станка</label>
-             <select @bind="model.Status" class="form-select">
-                 @if (statuses != null)
-                 {
-                     @foreach (var status in statuses)
-                     {
-                         <option @key="status.Id" value="@status.Id">@status.Name</option>
-                     }
-                 }
-             </select>
-         </div>
-            <div class="form-group col">
-                <br>
-                <label>Выберите номер цеха</label>
-                <select  @bind="model.Location" class="form-select">
-                    @if (users != null)
+        <div class="form-group col">
+            <br>
+            <label>Выберите номер участка</label>
+            <select @bind="model.Location" class="form-select">
+                @if (users != null)
+                {
+                    @foreach (var location in locations)
                     {
-                        @foreach (var location in locations)
-                        {
-                            <option  @key="location.Id" value="@location.Id" >@location.Build / @location.Room</option>
-                        }
+                        <option @key="location.Id" value="@location.Id">@location.Plot / @location.Plot</option>
                     }
-                </select>
+                }
+            </select>
 
-            </div>
-            <div class="form-group col">
-                <br>
-                <label>Табельный номер сотрудника</label>
-                <select @bind="model.User" class="form-select">
-                    @if (users != null)
+        </div>
+        <div class="form-group col">
+            <br>
+            <label>Выберите имя станка</label>
+            <select @bind="model.Machine" class="form-select">
+                @if (machines != null)
+                {
+                    @foreach (var machine in machines)
                     {
-                        @foreach (var user in users)
-                        {
-                            <option @key="user.Id" value="@user.Id" >@user.Id</option>
-                        }
+                        <option @key="machine.Id" value="@machine.Id">@machine.InventoryNumber</option>
                     }
-                </select>
+                }
+            </select>
 
-            </div>
+        </div>
+        <div class="form-group col">
+            <br>
+            <label>Выберите тип задачи</label>
+            <select @bind="model.Status" class="form-select">
+                @if (statuses != null)
+                {
+                    @foreach (var status in statuses)
+                    {
+                        <option @key="status.Id" value="@status.Id">@status.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        @*<div class="form-group col">
+            <br>
+            <label>Табельный номер сотрудника</label>
+            <select @bind="model.User" class="form-select">
+                @if (users != null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <option @key="user.Id" value="@user.Id">@user.Id</option>
+                    }
+                }
+            </select>
+                        На этом этапе сотрудник - тот кто зашёл в систему и создал заявку:
+                        Автор
+        </div>*@
 
 
 
@@ -139,7 +155,7 @@
         loading = true;
         try
         {
-
+            model.User = "1";
             await MaintenanceService.Create(model);
             AlertService.Success("Запись успешно добавлена", keepAfterRouteChange: true);
             NavigationManager.NavigateTo("maintenance");

@@ -41,7 +41,7 @@ namespace WebApi.Services
             return _context.Maintenances.Include(u => u.User)
                 .Include(l => l.Location)
                 .Include(m => m.Machine)
-                .Include(s => s.Status); //тут мб будет ошибка 
+                .Include(s => s.Status); 
         }
 
         public Maintenance GetById(int id)
@@ -82,10 +82,6 @@ namespace WebApi.Services
             
             if (model.Machine != null)
                     machine = _context.Machines.Where(machine => machine.Id == int.Parse(model.Machine)).FirstOrDefault();
-            // map model to new Maintenance object
-            //var Maintenance = _mapper.Map<Maintenance>(model);
-
-
 
             Maintenance maintenance = new Maintenance
             {

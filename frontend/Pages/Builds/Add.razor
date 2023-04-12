@@ -1,0 +1,50 @@
+﻿@page "/builds/add"
+@inject IAlertService AlertService
+@inject IAccountService AccountService
+@inject IBuildService BuildService
+@inject NavigationManager NavigationManager
+
+<h1>Добавить здание</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Номер здания</label>
+            <InputText @bind-Value="model.Name"/>
+            <ValidationMessage For="@(() => model.Name)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Сохранить
+        </button>
+        <NavLink href="Builds" class="btn btn-link">Отмена</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    private AddBuild model = new AddBuild();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await BuildService.Create(model);
+            AlertService.Success("Станок успешно добавлен", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("builds");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

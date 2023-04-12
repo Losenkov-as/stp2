@@ -2,19 +2,50 @@
 @inject IAlertService AlertService
 @inject IAccountService AccountService
 @inject IMachineService MachineService
+@inject IMachineTypeService MachineTypeService
+@inject IBuildService BuildService
 @inject NavigationManager NavigationManager
 
 <h1>Добавить станок</h1>
+
+<div class="form-group col">
+    <br>
+    <label>Выберите тип станка</label>
+    <select @bind="model.machinetype" class="form-select">
+        @if (machinetypes != null)
+        {
+            @foreach (var machinetype in machinetypes)
+            {
+                <option @key="machinetype.Id" value="@machinetype.Id">@machinetype.Name</option>
+            }
+        }
+    </select>
+
+</div>
+<div class="form-group col">
+    <br>
+    <label>Укажите здание</label>
+    <select @bind="model.build" class="form-select">
+        @if (builds != null)
+        {
+            @foreach (var build in builds)
+            {
+                <option @key="build.Id" value="@build.Id">@build.Name</option>
+            }
+        }
+    </select>
+
+</div>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="form-row">
         <div class="form-group col">
             <label>Инвентарный номер</label>
-            <InputText @bind-Value="model.InventoryNumber" class="form-control" />
+            <InputText @bind-Value="model.InventoryNumber" />
             <ValidationMessage For="@(() => model.InventoryNumber)" />
         </div>
     </div>
-    
+
     <div class="form-group">
         <button disabled="@loading" class="btn btn-primary">
             @if (loading)
@@ -29,7 +60,17 @@
 
 @code {
     private AddMachine model = new AddMachine();
+    public IList<MachineType> machinetypes;
+    public IList<Build> builds;
     private bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        machinetypes = await MachineTypeService.GetAll();
+        builds = await BuildService.GetAll();
+        loading = false;
+    }
 
     private async void OnValidSubmit()
     {
@@ -48,3 +89,4 @@
         }
     }
 }
+

@@ -51,7 +51,13 @@ namespace WebApi.Services
 
         public IEnumerable<Machine> GetAll()
         {
-            return _context.Machines.ToList();
+            //Room room = new Room();
+            //room = _context.Rooms.Include(a => a.Build);
+
+            return _context.Machines.Include(u => u.MachineModel)
+               .ThenInclude(q => q.MachineType)
+               .Include(s => s.Room)
+               .ThenInclude(a => a.Build);
         }
 
         public Machine GetById(int id)
@@ -64,9 +70,23 @@ namespace WebApi.Services
             // validate
             if (_context.Machines.Any(x => x.InventoryNumber == model.InventoryNumber)) //  ТУТ СТОИТ ПОДУМАТЬ
                 throw new AppException("Станок с инвентарным номером '" + model.InventoryNumber + "' уже существует");
-            
-            // map model to new user object
-            var machine = _mapper.Map<Machine>(model);
+
+            MachineType machinetype = null;
+            Build build = null;
+
+            if (model.build != null)
+                build = _context.Builds.Where(build => build.Id == int.Parse(model.build)).FirstOrDefault();
+
+            if (model.machinetype != null)
+                machinetype = _context.MachineTypes.Where(machinetype => machinetype.Id == int.Parse(model.machinetype)).FirstOrDefault();
+
+            Machine machine = new Machine
+            {
+                InventoryNumber = model.InventoryNumber,
+                Build = build,
+                MachineType = machinetype,
+
+            };
 
             _context.Machines.Add(machine);
             _context.SaveChanges();

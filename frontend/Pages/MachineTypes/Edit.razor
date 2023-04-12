@@ -1,0 +1,68 @@
+﻿@page "/machinetypes/edit/{Id}"
+@inject IAlertService AlertService
+@inject IAccountService AccountService
+@inject IMachineService MachineService
+@inject NavigationManager NavigationManager
+
+<h1>Сменить инвентарный номер станка</h1>
+@if (model != null)
+{
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="form-row">
+            <div class="form-group col">
+                <label>Инвентарный номер</label>
+                <InputText @bind-Value="model.InventoryNumber" class="form-control" />
+                <ValidationMessage For="@(() => model.InventoryNumber)" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button disabled="@loading" class="btn btn-primary">
+                @if (loading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                Save
+            </button>
+            <NavLink href="users" class="btn btn-link">Cancel</NavLink>
+        </div>
+    </EditForm>
+}
+else
+{
+    <div class="text-center p-3">
+        <span class="spinner-border spinner-border-lg align-center"></span>
+    </div>
+}
+
+@code {
+    private EditMachine model;
+    private bool loading;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var machine = await MachineService.GetById(Id);
+        model = new EditMachine(machine);
+    }
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await MachineService.Update(Id, model);
+            AlertService.Success("Update successful", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("machines");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}
