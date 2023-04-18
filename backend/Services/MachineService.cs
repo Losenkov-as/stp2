@@ -71,20 +71,20 @@ namespace WebApi.Services
             if (_context.Machines.Any(x => x.InventoryNumber == model.InventoryNumber)) //  ÒÓÒ ÑÒÎÈÒ ÏÎÄÓÌÀÒÜ
                 throw new AppException("Ñòàíîê ñ èíâåíòàðíûì íîìåðîì '" + model.InventoryNumber + "' óæå ñóùåñòâóåò");
 
-            MachineType machinetype = null;
-            Build build = null;
+            MachineModel machinemodel = null;
+            Room room = null;
 
-            if (model.build != null)
-                build = _context.Builds.Where(build => build.Id == int.Parse(model.build)).FirstOrDefault();
+            if (model.room != null)
+                room = _context.Rooms.Where(room => room.Id == int.Parse(model.room)).FirstOrDefault();
 
-            if (model.machinetype != null)
-                machinetype = _context.MachineTypes.Where(machinetype => machinetype.Id == int.Parse(model.machinetype)).FirstOrDefault();
+            if (model.machinemodel != null)
+                machinemodel = _context.MachineModels.Where(machinemodel => machinemodel.Id == int.Parse(model.machinemodel)).FirstOrDefault();
 
             Machine machine = new Machine
             {
                 InventoryNumber = model.InventoryNumber,
-                Build = build,
-                MachineType = machinetype,
+                Room = room,
+                MachineModel = machinemodel,
 
             };
 

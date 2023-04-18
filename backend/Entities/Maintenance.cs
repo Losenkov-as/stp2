@@ -17,6 +17,9 @@ namespace WebApi.Entities
         public Status Status { get; set; }
         public Location Location { get; set; }
         public User User { get; set; }
+        public string Comment { get; set; }
+        public TaskType TaskType { get; set; }
+
 
     }
 }

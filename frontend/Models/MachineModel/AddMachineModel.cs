@@ -8,6 +8,6 @@ namespace BlazorApp.Models
         public string Name { get; set; }
 
         [Required]
-        public int MachineType { get; set; }
+        public string MachineType { get; set; }
     }
 }

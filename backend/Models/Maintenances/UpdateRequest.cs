@@ -8,17 +8,14 @@ namespace WebApi.Models.Maintenance
     {
         [Required]
         public string Id { get; set; }
-
         [Required]
-        public DateTime DateOfUpdate { get; set; }
+        public DateTime DateOfEnd { get; set; }
         [Required]
-        public Machine Machine { get; set; }
+        public int User { get; set; }
         [Required]
-        public Status Status { get; set; }
+        public int Status { get; set; }
         [Required]
-        public User User { get; set; }
-        [Required]
-        public Location Location { get; set; }
+        public string Comment { get; set; }
         public bool IsDeleting { get; set; }
 
     }

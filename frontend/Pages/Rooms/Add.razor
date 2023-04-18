@@ -68,6 +68,7 @@
     {
         loading = true;
         builds = await BuildService.GetAll();
+        model.Build = builds.First().Id;
         loading = false;
     }
 }

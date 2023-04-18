@@ -11,6 +11,8 @@ namespace BlazorApp.Models
         public Machine Machine { get; set; }
         public Status Status { get; set; }
         public Location Location { get; set; } 
+        public TaskType TaskType { get; set; }
+        public string Comment { get; set; }
         public bool IsDeleting { get; set; }
     }
 }

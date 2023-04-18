@@ -27,7 +27,9 @@ namespace WebApi.Helpers
         public DbSet<MachineModel> MachineModels { get; set; }
         public DbSet<MachineType> MachineTypes { get; set; }
         public DbSet<Machine> Machines { get; set; }
+        public DbSet<TaskType> TaskType { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<AppHistory> AppHistory { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Maintenance> Maintenances { get; set; }
         public DbSet<Role> Roles { get; set; }

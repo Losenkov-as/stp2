@@ -1,0 +1,74 @@
+﻿@page "/tasktypes/add"
+@inject IAlertService AlertService
+@inject IAccountService AccountService
+@inject IBuildService BuildService
+@inject IMachineTypeService MachineTypeService
+@inject IMachineModelService MachineModelService
+@inject NavigationManager NavigationManager
+
+<h1>Добавить модель станка</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group col">
+        <br>
+        <label>Выберите тип станка</label>
+        <select @bind="model.MachineType" class="form-select">
+            @if (machinetypes != null)
+            {
+                @foreach (var machinetype in machinetypes)
+                {
+                    <option @key="machinetype.Id" value="@machinetype.Id">@machinetype.Name</option>
+                }
+            }
+        </select>
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Укажите модель</label>
+            <InputText @bind-Value="model.Name" />
+            <ValidationMessage For="@(() => model.Name)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Сохранить
+        </button>
+        <NavLink href="Builds" class="btn btn-link">Отмена</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    private AddMachineModel model = new AddMachineModel();
+    public IList<MachineType> machinetypes;
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await MachineModelService.Create(model);
+            AlertService.Success("Модель станка успешно добавлена", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("machinetypes");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        machinetypes = await MachineTypeService.GetAll();
+        loading = false;
+    }
+}

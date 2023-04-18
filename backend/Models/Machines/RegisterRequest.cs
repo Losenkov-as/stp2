@@ -7,9 +7,9 @@ namespace WebApi.Models.Machines
         [Required]
         public string InventoryNumber { get; set; }
         [Required]
-        public string machinetype { get; set; }
+        public string machinemodel { get; set; }
 
         [Required]
-        public string build { get; set; }
+        public string room { get; set; }
     }
 }

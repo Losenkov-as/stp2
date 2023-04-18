@@ -12,7 +12,7 @@ namespace BlazorApp.Models.Account
         public string Workshop { get; set; }
 
         [Required]
-        public int User { get; set; }
+        public string User { get; set; }
 
     }
 }

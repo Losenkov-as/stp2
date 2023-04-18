@@ -49,12 +49,12 @@ namespace WebApi.Controllers
             return Ok(maintenance);
         }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, UpdateRequest model)
-        //{
-        //    _maintenanceService.Update(id, model);
-        //    return Ok(new { message = "Maintenance updated successfully" });
-        //}
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, UpdateRequest model)
+        {
+            _maintenanceService.Update(id, model);
+            return Ok(new { message = "Maintenance updated successfully" });
+        }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

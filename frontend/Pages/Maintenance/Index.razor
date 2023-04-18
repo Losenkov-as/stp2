@@ -2,15 +2,18 @@
 @attribute [Authorize]
 @inject IMaintenanceService MaintenanceService
 @inject IAccountService AccountService
+@inject NavigationManager NavigationManager
+
 
 <h1>Журнал заявок</h1>
 <NavLink href="maintenance/add" class="btn btn-sm btn-success mb-2">Новая заявка</NavLink>
-<NavLink href="maintenance/exe" class="btn btn-sm btn-success mb-2">Назначить исполнителя</NavLink>
+<NavLink href="maintenance/exe" class="btn btn-sm btn-success mb-2">Обработать</NavLink>
 <table class="table table-striped table-sm table-responsive table-hover">
     <thead>
         <tr>
             <th scope="col">Номер заявки</th>
-            <th scope="col">Дата обслуживания</th>
+            <th scope="col">Тип задачи</th>
+            <th scope="col">Дата создания</th>
             <th scope="col">Номер станка</th>
             <th scope="col">Статус станка</th>
             <th scope="col">Местоположение</th>
@@ -24,12 +27,13 @@
             foreach (var maintenance in maintenances)
             {
                 <tr>
-                    <td>@maintenance.Id</td>
-                    <td>@maintenance.DateOfUpdate</td>
-                    <td>@maintenance.Machine.InventoryNumber</td>
-                    <td>@maintenance.Status.Name</td>
-                    <td>@maintenance.Location.Workshop / @maintenance.Location.Plot</td>
-                    <td>@maintenance.User.Username</td>
+                    <td @onclick="ToHell">@maintenance.Id</td>
+                    <td @onclick="ToHell">@maintenance.TaskType.Name</td>
+                    <td @onclick="ToHell">@maintenance.DateOfUpdate</td>
+                    <td @onclick="ToHell">@maintenance.Machine.InventoryNumber</td>
+                    <td @onclick="ToHell">@maintenance.Status.Name</td>
+                    <td @onclick="ToHell">@maintenance.Location.Workshop / @maintenance.Location.Plot</td>
+                    <td @onclick="ToHell">@maintenance.User.Username</td>
                     <td style="white-space: nowrap">
                         @*<NavLink href="@($"maintenances/edit/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
                         <button @onclick="@(() => DeleteMaintenance(maintenance.Id))" disabled="@maintenance.IsDeleting" class="btn btn-sm btn-danger ">
@@ -75,5 +79,11 @@
         await MaintenanceService.Delete(id);
         maintenances.Remove(maintenance);
         StateHasChanged();
+    }
+
+    public void ToHell()
+    {
+        //int ID = maintenances;
+        NavigationManager.NavigateTo("details/2");
     }
 }

@@ -16,6 +16,10 @@ namespace WebApi.Models.Maintenance
         public string User { get; set; }
         [Required]
         public string Location { get; set; }
+        [Required]
+        public string TaskType { get; set; }
+        [Required]
+        public string Comment { get; set; }
         public bool IsDeleting { get; set; }
 
     }

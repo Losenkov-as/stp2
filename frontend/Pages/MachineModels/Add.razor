@@ -69,6 +69,7 @@
     {
         loading = true;
         machinetypes = await MachineTypeService.GetAll();
+        model.MachineType = machinetypes.First().Id;
         loading = false;
     }
 }

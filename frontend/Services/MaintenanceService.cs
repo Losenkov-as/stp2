@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+
 namespace BlazorApp.Services
 {
     public interface IMaintenanceService
@@ -74,5 +75,6 @@ namespace BlazorApp.Services
         {
             await _httpService.Delete($"/maintenances/{id}");
         }
+
     }
 }

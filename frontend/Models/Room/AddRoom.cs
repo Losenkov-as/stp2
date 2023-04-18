@@ -8,6 +8,6 @@ namespace BlazorApp.Models.Account
         public string Name { get; set; }
 
         [Required]
-        public int Build { get; set; }
+        public string Build { get; set; }
     }
 }

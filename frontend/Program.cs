@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlazorApp
 {
+    
     public class Program
     {
         public static async Task Main(string[] args)
@@ -18,10 +19,12 @@ namespace BlazorApp
             builder.Services
                 .AddScoped<IAccountService, AccountService>()
                 .AddScoped<IBuildService, BuildService>()
+                .AddScoped<ITaskTypeService, TaskTypeService>()
                 .AddScoped<IRoomService, RoomService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<ILocationService, LocationService>()
                 .AddScoped<IAlertService, AlertService>()
+                .AddScoped<IAppHistoryService, AppHistoryService>()
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<IStatusService, StatusService>()
                 .AddScoped<IMachineService, MachineService>()
@@ -51,6 +54,12 @@ namespace BlazorApp
 
             var roleService = host.Services.GetRequiredService<IRoleService>();
             await roleService.Initialize();
+
+            var apphistoryService = host.Services.GetRequiredService<IAppHistoryService>();
+            await apphistoryService.Initialize();
+
+            var tasktypeService = host.Services.GetRequiredService<ITaskTypeService>();
+            await tasktypeService.Initialize();
 
             var BuildService = host.Services.GetRequiredService<IBuildService>();
             await BuildService.Initialize();

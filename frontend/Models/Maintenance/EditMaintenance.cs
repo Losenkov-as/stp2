@@ -11,8 +11,12 @@ namespace BlazorApp.Models.Account
         [Required]
         public DateTime DateOfEnd { get; set; }
         [Required]
-        public string User { get; set; }
-        
+        public int User { get; set; }
+        [Required]
+        public int Status { get; set; }
+        [Required]
+        public string Comment { get; set; }
+
         public EditMaintenance()
         {
             //DateOfUpdate = maintenance.DateOfUpdate;

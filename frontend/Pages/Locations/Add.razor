@@ -78,6 +78,7 @@
     {
         loading = true;
         users = await AccountService.GetAll();
+        model.User = users.First().Id;
         loading = false;
     }
 }

@@ -6,102 +6,82 @@
 @inject NavigationManager NavigationManager
 
 <h1>Назначение исполнителя</h1>
-<h2>Список новых заявок</h2>
-<table class="table table-striped table-sm table-responsive table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Номер заявки</th>
-            <th scope="col">Дата обслуживания</th>
-            <th scope="col">Имя станка</th>
-            <th scope="col">Статус станка</th>
-            <th scope="col">Местоположение</th>
-            <th scope="col">Автор</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (maintenances != null)
-        {
-            foreach (var maintenance in maintenances)
-            {
-                <tr>
-                    <td>@maintenance.Id</td>
-                    <td>@maintenance.DateOfUpdate</td>
-                    <td>@maintenance.Machine.InventoryNumber</td>
-                    <td>@maintenance.Status.Name</td>
-                    <td>@maintenance.Location.Workshop / @maintenance.Location.Plot</td>
-                    <td>@maintenance.User.Username</td>
-                    <td style="white-space: nowrap">
-                        @*<NavLink href="@($"maintenances/edit/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
-                    </td>
-                </tr>
-            }
-        }
-        @if (loading)
-        {
-            <tr>
-                <td colspan="4" class="text-center">
-                    <span class="spinner-border spinner-border-lg align-center"></span>
-                </td>
-            </tr>
-        }
 
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Укажите номер заявки</label>
+            <InputText @bind-Value="model.Id" class="form-control" />
+            <ValidationMessage For="@(() => model.Id)" />
+        </div>
+        <div class="form-group col">
+            <label>Дата окончания работ</label>
+            <InputDate @bind-Value="model.DateOfEnd" class="form-control" />
+            <ValidationMessage For="@(() => model.DateOfEnd)" />
+        </div>
+        <div class="form-group col">
+            <br>
+            <label>Табельный номер сотрудника</label>
+            <select @bind="model.User" class="form-select">
+                @if (users != null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <option @key="user.Id" value="@user.Id">@user.Id</option>
+                    }
+                }
+            </select>
 
-    <div class="form-group col">
-        <br>
-        <label>Укажите номер заявки</label>
-        @*<select @bind="model.Id" class="form-select">
-            @if (maintenances != null)
-            {-->
-                @foreach (var location in locations)
-                {
-                    <option @key="location.Id" value="@location.Id">@location.Build / @location.Room</option>
-                }
-            }
-        </select>*@
-        <input  @bind="model.Id" />
+        </div>
+        <div class="form-group col">
+            <label>Комментарий к задаче</label>
+            <InputText @bind-Value="model.Comment" class="form-control" />
+            <ValidationMessage For="@(() => model.Comment)" />
+        </div>
     </div>
-    <div class="form-group col">
-        <br>
-        <label>Укажите номер исполнителя</label>
-        @*<select @bind="model.Location" class="form-select">
-            @if (users != null)
+
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
             {
-                @foreach (var location in locations)
-                {
-                    <option @key="location.Id" value="@location.Id">@location.Build / @location.Room</option>
-                }
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+
             }
-        </select>*@
-        <input @bind="model.User" />
+            В работу
+        </button>
+        <NavLink href="locations" class="btn btn-link">Отмена</NavLink>
     </div>
-    <div class="form-group col">
-        <br>
-        <label>Укажите дату окончания работ</label>
-        @*<select @bind="model.Machine" class="form-select">
-            @if (machines != null)
-            {
-                @foreach (var machine in machines)
-                {
-                    <option @key="machine.Id" value="@machine.Id">@machine.InventoryNumber</option>
-                }
-            }
-        </select>*@
-        <input asp-for="DateTime" @bind="model.DateOfEnd" />
-    </div>
-    </tbody>
-</table>
+
+</EditForm>
 
 @code {
     private bool loading;
     private EditMaintenance model = new EditMaintenance();
     private IList<Maintenance> maintenances;
+    private IList<User> users;
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-        maintenances = await MaintenanceService.GetAll();
+        users = await AccountService.GetAll();
+        model.User = int.Parse(users.First().Id);
         loading = false;
     }
-
+    public async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await MaintenanceService.Update(model.Id, model);
+            AlertService.Success("Запись успешно добавлена", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("maintenance");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
 }

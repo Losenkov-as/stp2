@@ -4,6 +4,8 @@
 @inject IMachineService MachineService
 @inject IMachineTypeService MachineTypeService
 @inject IBuildService BuildService
+@inject IMachineModelService MachineModelService
+@inject IRoomService RoomService
 @inject NavigationManager NavigationManager
 
 <h1>Добавить станок</h1>
@@ -11,12 +13,12 @@
 <div class="form-group col">
     <br>
     <label>Выберите тип станка</label>
-    <select @bind="model.machinetype" class="form-select">
-        @if (machinetypes != null)
+    <select @bind="model.machinemodel" class="form-select">
+        @if (machinemodels != null)
         {
-            @foreach (var machinetype in machinetypes)
+            @foreach (var machinemodel in machinemodels)
             {
-                <option @key="machinetype.Id" value="@machinetype.Id">@machinetype.Name</option>
+                <option @key="machinemodel.Id" value="@machinemodel.Id">@machinemodel.Name</option>
             }
         }
     </select>
@@ -25,12 +27,12 @@
 <div class="form-group col">
     <br>
     <label>Укажите здание</label>
-    <select @bind="model.build" class="form-select">
-        @if (builds != null)
+    <select @bind="model.room" class="form-select">
+        @if (rooms != null)
         {
-            @foreach (var build in builds)
+            @foreach (var room in rooms)
             {
-                <option @key="build.Id" value="@build.Id">@build.Name</option>
+                <option @key="room.Id" value="@room.Id">@room.Name</option>
             }
         }
     </select>
@@ -62,13 +64,18 @@
     private AddMachine model = new AddMachine();
     public IList<MachineType> machinetypes;
     public IList<Build> builds;
+    public IList<MachineModel> machinemodels;
+    public IList<Room> rooms;
     private bool loading;
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-        machinetypes = await MachineTypeService.GetAll();
-        builds = await BuildService.GetAll();
+        machinemodels = await MachineModelService.GetAll();
+        model.machinemodel = machinemodels.First().Id;
+        rooms = await RoomService.GetAll();
+        model.room = rooms.First().Id.ToString();
+
         loading = false;
     }
 

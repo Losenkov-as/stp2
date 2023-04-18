@@ -11,10 +11,17 @@ namespace BlazorApp.Models.Account
         public string User { get; set; }
         [Required]
         public string Machine { get; set; }
+
         [Required]
         public string Status { get; set; }
         [Required]
         public string Location { get; set; }
+
+        [Required]
+        public string Comment { get; set; }
+
+        [Required]
+        public string TaskType { get; set; }
 
         //public AddMaintenance()
         //{

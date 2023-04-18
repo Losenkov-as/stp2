@@ -3,5 +3,4 @@ Add-Migration Initial -context DataContext
 Update-Database
 professorweb.ru
 metanit.com
-
 Alert на delete  
