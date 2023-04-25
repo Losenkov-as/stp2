@@ -10,7 +10,7 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230425102232_Initial")]
+    [Migration("20230425155828_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,18 +82,18 @@ namespace WebApi.Migrations
                     b.Property<string>("Machine")
                         .HasColumnType("text");
 
+                    b.Property<int>("MaintenanceId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
                     b.Property<string>("TaskType")
                         .HasColumnType("text");
 
-                    b.Property<int?>("maintenanceId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("maintenanceId");
+                    b.HasIndex("MaintenanceId");
 
                     b.ToTable("AppHistory");
                 });
@@ -354,11 +354,13 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.AppHistory", b =>
                 {
-                    b.HasOne("WebApi.Entities.Maintenance", "maintenance")
-                        .WithMany()
-                        .HasForeignKey("maintenanceId");
+                    b.HasOne("WebApi.Entities.Maintenance", "Maintenance")
+                        .WithMany("AppHistories")
+                        .HasForeignKey("MaintenanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("maintenance");
+                    b.Navigation("Maintenance");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Location", b =>
@@ -456,6 +458,11 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Entities.Machine", b =>
                 {
                     b.Navigation("Maintenances");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Maintenance", b =>
+                {
+                    b.Navigation("AppHistories");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Status", b =>

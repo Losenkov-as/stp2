@@ -259,7 +259,7 @@ namespace WebApi.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    maintenanceId = table.Column<int>(type: "integer", nullable: true),
+                    MaintenanceId = table.Column<int>(type: "integer", nullable: false),
                     DateOfCreate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateOfTreatment = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateOfStart = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -280,17 +280,17 @@ namespace WebApi.Migrations
                 {
                     table.PrimaryKey("PK_AppHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AppHistory_Maintenances_maintenanceId",
-                        column: x => x.maintenanceId,
+                        name: "FK_AppHistory_Maintenances_MaintenanceId",
+                        column: x => x.MaintenanceId,
                         principalTable: "Maintenances",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AppHistory_maintenanceId",
+                name: "IX_AppHistory_MaintenanceId",
                 table: "AppHistory",
-                column: "maintenanceId");
+                column: "MaintenanceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_UserId",

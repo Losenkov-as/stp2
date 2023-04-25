@@ -11,7 +11,8 @@ namespace WebApi.Entities
     public class AppHistory
     {
         public int Id { get; set; }
-        public Maintenance maintenance { get; set; }
+        public Maintenance Maintenance { get; set; }
+        public int MaintenanceId { get; set; }
         public DateTime DateOfCreate { get; set; }
         public DateTime DateOfTreatment { get; set; }
         public DateTime DateOfStart { get; set; }

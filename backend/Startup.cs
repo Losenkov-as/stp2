@@ -52,6 +52,7 @@ namespace WebApi
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ITaskTypeService, TaskTypeService>();
+            services.AddScoped<IAppHistoryService, AppHistoryService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IBuildService, BuildService>();
             services.AddScoped<ILocationService, LocationService>();

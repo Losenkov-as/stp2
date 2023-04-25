@@ -97,7 +97,7 @@ namespace WebApi.Services
                 Comment = model.Comment
             };
             AppHistory apphistory = new AppHistory { 
-                maintenance = maintenance,
+                Maintenance = maintenance,
                 DateOfStart = DateTime.Now,
                 Status = status.Name,
                 Machine = machine.InventoryNumber,
@@ -106,15 +106,15 @@ namespace WebApi.Services
                 TaskType = tasktype.Name,
                 CommentOfAuthor = model.Comment
             };
-            IEnumerable<AppHistory> arr = _context.AppHistory;
-            if (_context.AppHistory.Count() == 0) {
+            IEnumerable<AppHistory> arr = _context.AppHistories;
+            if (_context.AppHistories.Count() == 0) {
                 apphistory.Id = 1;
             }
             else { 
                  apphistory.Id = arr.OrderBy(id => apphistory.Id).Last().Id + 1; 
             }
             _context.Maintenances.Add(maintenance);
-            _context.AppHistory.Add(apphistory);
+            _context.AppHistories.Add(apphistory);
             _context.SaveChanges();
         }
 
@@ -139,7 +139,7 @@ namespace WebApi.Services
 
             AppHistory apphistory = new AppHistory
             {
-                maintenance = maintenance,
+                Maintenance = maintenance,
                 Machine = maintenance.Machine.InventoryNumber,
                 Author = maintenance.User.Username, //тут из-за порядка кода может возникнуть залупа, хотя пока норм
                 CommentOfAuthor = maintenance.Comment,
@@ -157,8 +157,8 @@ namespace WebApi.Services
             maintenance.Comment = model.Comment;
 
 
-            IEnumerable<AppHistory> arr = _context.AppHistory;
-            if (_context.AppHistory.Count() == 0)
+            IEnumerable<AppHistory> arr = _context.AppHistories;
+            if (_context.AppHistories.Count() == 0)
             {
                 apphistory.Id = 1;
             }
@@ -169,7 +169,7 @@ namespace WebApi.Services
             //AppHistory apphistory1 = new AppHistory();
             //apphistory1 = _context.AppHistory.FirstOrDefault(u => u.Id == id);
             _context.Maintenances.Update(maintenance);
-            _context.AppHistory.Add(apphistory);
+            _context.AppHistories.Add(apphistory);
             _context.SaveChanges();
         }
 
