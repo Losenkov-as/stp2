@@ -18,9 +18,6 @@ namespace WebApi.Helpers
             // connect to sql server database
             options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
         }
-
-
-
         public DbSet<User> Users { get; set; }
         public DbSet<Build> Builds { get; set; }
         public DbSet<Room> Rooms { get; set; }

@@ -6,7 +6,6 @@ using WebApi.Authorization;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models.Maintenance;
-
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -97,7 +96,16 @@ namespace WebApi.Services
                 TaskType = tasktype,
                 Comment = model.Comment
             };
-            AppHistory apphistory = new AppHistory { maintenance = maintenance };
+            AppHistory apphistory = new AppHistory { 
+                maintenance = maintenance,
+                DateOfStart = DateTime.Now,
+                Status = status.Name,
+                Machine = machine.InventoryNumber,
+                Location = location.Plot,
+                Author = user.Username,
+                TaskType = tasktype.Name,
+                CommentOfAuthor = model.Comment
+            };
             IEnumerable<AppHistory> arr = _context.AppHistory;
             if (_context.AppHistory.Count() == 0) {
                 apphistory.Id = 1;
@@ -121,7 +129,7 @@ namespace WebApi.Services
 
 
             User user = null;
-            user = _context.Users.Where(user => user.Id == model.User).FirstOrDefault();
+            user = _context.Users.Where(user => user.Id == int.Parse(model.User)).FirstOrDefault();
 
             Status status = new Status
             {
@@ -129,11 +137,39 @@ namespace WebApi.Services
                 Name = "В работе"
             };
 
-            maintenance.Status = status;
+            AppHistory apphistory = new AppHistory
+            {
+                maintenance = maintenance,
+                Machine = maintenance.Machine.InventoryNumber,
+                Author = maintenance.User.Username, //тут из-за порядка кода может возникнуть залупа, хотя пока норм
+                CommentOfAuthor = maintenance.Comment,
+                Location = maintenance.Location.Plot,
+                DateOfCreate = maintenance.DateOfUpdate,
+                CommentOfDispatcher = model.Comment,
+                DateOfEnd = model.DateOfEnd,
+                TaskType = maintenance.TaskType.Name,
+                Executor = user.Username,
+                Status = "В работе"
+            };
+            //maintenance.Status = status;
             maintenance.User = user;
             maintenance.DateOfUpdate = model.DateOfEnd;
             maintenance.Comment = model.Comment;
+
+
+            IEnumerable<AppHistory> arr = _context.AppHistory;
+            if (_context.AppHistory.Count() == 0)
+            {
+                apphistory.Id = 1;
+            }
+            else
+            {
+                apphistory.Id = arr.OrderBy(id => apphistory.Id).Last().Id + 1;
+            }
+            //AppHistory apphistory1 = new AppHistory();
+            //apphistory1 = _context.AppHistory.FirstOrDefault(u => u.Id == id);
             _context.Maintenances.Update(maintenance);
+            _context.AppHistory.Add(apphistory);
             _context.SaveChanges();
         }
 
@@ -159,11 +195,17 @@ namespace WebApi.Services
             //maintenance.TaskType = _context.TaskType.FirstOrDefault(t => t.Id == t.Id);
             //maintenance.Status = _context.Statuses.FirstOrDefault(f => f.Id == f.Id);
             //if (maintenance == null) throw new KeyNotFoundException("Maintenance not found");
-            return _context.Maintenances.Include(u => u.User)
-               .Include(l => l.Location)
-               .Include(m => m.Machine)
-               .Include(q => q.TaskType)
-               .Include(s => s.Status).FirstOrDefault(u => u.Id == id);
+
+            var maintenance = _context.Maintenances.FirstOrDefault(u => u.Id == id); // .FirstOrDefault(u => u.Id == id);
+            
+            maintenance.User = _context.Users.FirstOrDefault(u => u.Id == maintenance.userId);
+            maintenance.Location = _context.Locations.FirstOrDefault(u => u.Id == maintenance.locationId);
+            maintenance.Machine = _context.Machines.FirstOrDefault(u => u.Id == maintenance.machineId);
+            maintenance.Status = _context.Statuses.FirstOrDefault(u => u.Id == maintenance.statusId);
+            maintenance.TaskType = _context.TaskType.FirstOrDefault(u => u.Id == maintenance.tasktypeId);
+
+            if (maintenance == null) throw new KeyNotFoundException("Местоположение не найдено");
+            return maintenance;
         }
     }
 }

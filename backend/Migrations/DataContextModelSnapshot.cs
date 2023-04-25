@@ -41,8 +41,50 @@ namespace WebApi.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Author")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommentOfAuthor")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommentOfDispatcher")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommentOfExecutor")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfCreate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfEnd")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfStart")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfTreatment")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Dispatcher")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Executor")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleting")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Machine")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TaskType")
+                        .HasColumnType("text");
 
                     b.Property<int?>("maintenanceId")
                         .HasColumnType("integer");
@@ -165,32 +207,32 @@ namespace WebApi.Migrations
                     b.Property<DateTime>("DateOfUpdate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("LocationId")
+                    b.Property<int>("locationId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MachineId")
+                    b.Property<int>("machineId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("StatusId")
+                    b.Property<int>("statusId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TaskTypeId")
+                    b.Property<int>("tasktypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("userId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("locationId");
 
-                    b.HasIndex("MachineId");
+                    b.HasIndex("machineId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("statusId");
 
-                    b.HasIndex("TaskTypeId");
+                    b.HasIndex("tasktypeId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("userId");
 
                     b.ToTable("Maintenances");
                 });
@@ -356,23 +398,33 @@ namespace WebApi.Migrations
                 {
                     b.HasOne("WebApi.Entities.Location", "Location")
                         .WithMany("Maintenances")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("locationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApi.Entities.Machine", "Machine")
                         .WithMany("Maintenances")
-                        .HasForeignKey("MachineId");
+                        .HasForeignKey("machineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApi.Entities.Status", "Status")
                         .WithMany("Maintenances")
-                        .HasForeignKey("StatusId");
+                        .HasForeignKey("statusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApi.Entities.TaskType", "TaskType")
                         .WithMany()
-                        .HasForeignKey("TaskTypeId");
+                        .HasForeignKey("tasktypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApi.Entities.User", "User")
                         .WithMany("Maintenances")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Location");
 

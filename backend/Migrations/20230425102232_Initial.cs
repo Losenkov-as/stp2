@@ -211,46 +211,46 @@ namespace WebApi.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DateOfUpdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    MachineId = table.Column<int>(type: "integer", nullable: true),
-                    StatusId = table.Column<int>(type: "integer", nullable: true),
-                    LocationId = table.Column<int>(type: "integer", nullable: true),
-                    UserId = table.Column<int>(type: "integer", nullable: true),
+                    machineId = table.Column<int>(type: "integer", nullable: false),
+                    statusId = table.Column<int>(type: "integer", nullable: false),
+                    locationId = table.Column<int>(type: "integer", nullable: false),
+                    userId = table.Column<int>(type: "integer", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
-                    TaskTypeId = table.Column<int>(type: "integer", nullable: true)
+                    tasktypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Maintenances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Maintenances_Locations_LocationId",
-                        column: x => x.LocationId,
+                        name: "FK_Maintenances_Locations_locationId",
+                        column: x => x.locationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Maintenances_Machines_MachineId",
-                        column: x => x.MachineId,
+                        name: "FK_Maintenances_Machines_machineId",
+                        column: x => x.machineId,
                         principalTable: "Machines",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Maintenances_Statuses_StatusId",
-                        column: x => x.StatusId,
+                        name: "FK_Maintenances_Statuses_statusId",
+                        column: x => x.statusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Maintenances_TaskType_TaskTypeId",
-                        column: x => x.TaskTypeId,
+                        name: "FK_Maintenances_TaskType_tasktypeId",
+                        column: x => x.tasktypeId,
                         principalTable: "TaskType",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Maintenances_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Maintenances_Users_userId",
+                        column: x => x.userId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,6 +260,20 @@ namespace WebApi.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     maintenanceId = table.Column<int>(type: "integer", nullable: true),
+                    DateOfCreate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DateOfTreatment = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DateOfStart = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DateOfEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Machine = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    Author = table.Column<string>(type: "text", nullable: true),
+                    Dispatcher = table.Column<string>(type: "text", nullable: true),
+                    Executor = table.Column<string>(type: "text", nullable: true),
+                    TaskType = table.Column<string>(type: "text", nullable: true),
+                    CommentOfExecutor = table.Column<string>(type: "text", nullable: true),
+                    CommentOfDispatcher = table.Column<string>(type: "text", nullable: true),
+                    CommentOfAuthor = table.Column<string>(type: "text", nullable: true),
                     IsDeleting = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -299,29 +313,29 @@ namespace WebApi.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maintenances_LocationId",
+                name: "IX_Maintenances_locationId",
                 table: "Maintenances",
-                column: "LocationId");
+                column: "locationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maintenances_MachineId",
+                name: "IX_Maintenances_machineId",
                 table: "Maintenances",
-                column: "MachineId");
+                column: "machineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maintenances_StatusId",
+                name: "IX_Maintenances_statusId",
                 table: "Maintenances",
-                column: "StatusId");
+                column: "statusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maintenances_TaskTypeId",
+                name: "IX_Maintenances_tasktypeId",
                 table: "Maintenances",
-                column: "TaskTypeId");
+                column: "tasktypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maintenances_UserId",
+                name: "IX_Maintenances_userId",
                 table: "Maintenances",
-                column: "UserId");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleUser_UsersId",

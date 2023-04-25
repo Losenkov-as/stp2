@@ -14,7 +14,7 @@ namespace BlazorApp.Services
         Task Create(AddMaintenance model);
         Task<IList<Maintenance>> GetAll();
         Task<Maintenance> GetById(string id);
-        Task Update(string id, EditMaintenance model);
+        Task Update(int id, EditMaintenance model);
         Task Delete(string id);
     }
 
@@ -58,12 +58,12 @@ namespace BlazorApp.Services
             return await _httpService.Get<Maintenance>($"/maintenances/{id}");
         }
 
-        public async Task Update(string id, EditMaintenance model)
+        public async Task Update(int id, EditMaintenance model)
         {
             await _httpService.Put($"/maintenances/{id}", model);
 
             // update stored Maintenance if the logged in Maintenance updated their own record
-            if (id == Maintenance.Id) 
+            if (id == int.Parse(Maintenance.Id)) 
             {
                 // update local storage
                 //Maintenance.Name = model.Name;

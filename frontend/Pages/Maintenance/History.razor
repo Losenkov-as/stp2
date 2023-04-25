@@ -1,5 +1,4 @@
-﻿@page "/details/{maintenanceid}"
-@attribute [Authorize]
+﻿@page "/maintenances/history/{Id}"
 @inject IMaintenanceService MaintenanceService
 @inject IAppHistoryService AppHistoryService
 @inject IAccountService AccountService
@@ -20,23 +19,18 @@
         </tr>
     </thead>
     <tbody>
-        @if (maintenance != null)
+        @if (apps != null)
         {
-            
+
+            foreach (var app in apps)
+            {
                 <tr>
-                    <td>@maintenanceid</td>
-                    <td>@maintenance.TaskType.Name</td>
-                    <td>@maintenance.DateOfUpdate</td>
-                    <td>@maintenance.Machine.InventoryNumber</td>
-                    <td>@maintenance.Status.Name</td>
-                    <td>@maintenance.Location.Workshop / @maintenance.Location.Plot</td>
-                    <td>@maintenance.User.Username</td>
-                    <td style="white-space: nowrap">
-                        @*<NavLink href="@($"maintenances/edit/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Редактировать</NavLink>*@
-                        
-                    </td>
+                    <td>@app.Author</td>
+
+                  
                 </tr>
-            
+            }
+
         }
         @if (loading)
         {
@@ -53,15 +47,14 @@
     private bool loading;
     private Maintenance maintenance = new Maintenance();
     private IList<AppHistory> apps;
+    
+    [Parameter]
+    public string Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-        maintenance = await MaintenanceService.GetById(maintenanceid);
-        //apps = await AppHistoryService.GetAll();
+        apps = await AppHistoryService.GetAll();
         loading = false;
     }
-
-    [Parameter]
-    public string maintenanceid { get; set; }
 }

@@ -1,0 +1,90 @@
+﻿@page "/maintenances/edit/{Id}"
+@inject IAlertService AlertService
+@inject IMaintenanceService MaintenanceService
+@inject IAccountService AccountService
+@inject IMachineService MachineService
+@inject IStatusService StatusService
+@inject ITaskTypeService TaskTypeService
+@inject NavigationManager NavigationManager
+
+<h1>Назначение исполнителя</h1>
+@if (model != null)
+{
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="form-row">
+
+            <div class="form-group col">
+                <label>Дата окончания работ</label>
+                <InputDate @bind-Value="model.DateOfEnd" class="form-control" />
+                <ValidationMessage For="@(() => model.DateOfEnd)" />
+            </div>
+            <div class="form-group col">
+                <br>
+                <label>Табельный номер сотрудника</label>
+                <select @bind="model.User" class="form-select">
+                    @if (users != null)
+                    {
+                        @foreach (var user in users)
+                        {
+                            <option @key="user.Id" value="@user.Id">@user.Id</option>
+                        }
+                    }
+                </select>
+
+            </div>
+            <div class="form-group col">
+                <label>Комментарий к задаче</label>
+                <InputText @bind-Value="model.Comment" class="form-control" />
+                <ValidationMessage For="@(() => model.Comment)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button disabled="@loading" class="btn btn-primary">
+                @if (loading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                В работу
+            </button>
+            <NavLink href="maintenances" class="btn btn-link">Отмена</NavLink>
+        </div>
+
+    </EditForm>
+}
+
+@code {
+    private bool loading;
+    private EditMaintenance model;
+    private Maintenance maintenance = null;
+    private IList<User> users;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        users = await AccountService.GetAll();
+        maintenance = await MaintenanceService.GetById(Id);
+        model = new EditMaintenance(maintenance);
+        loading = false;
+    }
+    public async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await MaintenanceService.Update(int.Parse(Id), model);
+            AlertService.Success("Запись успешно обновлена", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("maintenance");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

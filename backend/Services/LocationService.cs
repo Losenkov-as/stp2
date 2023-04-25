@@ -90,8 +90,8 @@ namespace WebApi.Services
             var location = getLocation(id);
 
             //// validate                                                                                    Жена занимается сексом с 3 муужиками, тут
-            if (model.Room != location.Plot && _context.Locations.Any(x => x.Plot == model.Room))            // приходит муж. Жена достаёт черные мешки и пакует туда
-                throw new AppException("Username '" + model.Room + "' is already taken");                    //любовников. 
+            if (model.Plot != location.Plot && _context.Locations.Any(x => x.Plot == model.Plot))            // приходит муж. Жена достаёт черные мешки и пакует туда
+                throw new AppException("Username '" + model.Plot + "' is already taken");                    //любовников. 
             //                                                                                               Муж: что это за мешки?                                                                                                             
             //                                                                                               Жена: мама с дачи гостинцы привезла
             //                                                                                               Муж пнул один мешок и слышит "Беее"
@@ -103,11 +103,11 @@ namespace WebApi.Services
             User user = null;
             user = _context.Users.Where(user => user.Id == model.User).FirstOrDefault();
 
-            location.Workshop = model.Build;
-            location.Plot = model.Room;
+            location.Workshop = model.Workshop;
+            location.Plot = model.Plot;
 
             location.User = user;
-
+            location.UserId = user.Id;
 
             _context.Locations.Update(location);
             _context.SaveChanges();
@@ -125,6 +125,7 @@ namespace WebApi.Services
         private Location getLocation(int id)
         {
             var location = _context.Locations.FirstOrDefault(u => u.Id == id); // .FirstOrDefault(u => u.Id == id);
+            location.UserId = id;
             location.User = _context.Users.FirstOrDefault(u => u.Id == location.UserId);
             if (location == null) throw new KeyNotFoundException("Местоположение не найдено");
             return location;

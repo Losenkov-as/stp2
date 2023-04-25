@@ -14,11 +14,16 @@ namespace WebApi.Entities
         public int Id { get; set; }
         public DateTime DateOfUpdate { get; set; }
         public Machine Machine { get; set; }
+        public int machineId { get; set; }
         public Status Status { get; set; }
+        public int statusId { get; set; }
         public Location Location { get; set; }
+        public int locationId { get; set; }
         public User User { get; set; }
+        public int userId { get; set; }
         public string Comment { get; set; }
         public TaskType TaskType { get; set; }
+        public int tasktypeId { get; set; }
 
 
     }

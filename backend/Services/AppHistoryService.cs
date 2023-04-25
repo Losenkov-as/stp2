@@ -51,7 +51,7 @@ namespace WebApi.Services
 
         public IEnumerable<AppHistory> GetAll()
         {
-            return _context.AppHistory.Include(l => l.maintenance);
+            return _context.AppHistory.Include(i => i.maintenance);
         }
 
         public AppHistory GetById(int id)
