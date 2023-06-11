@@ -1,7 +1,8 @@
-﻿@page "/maintenances/edit/{Id}"
+﻿@page "/maintenances/toexe/{Id}"
 @inject IAlertService AlertService
 @inject IMaintenanceService MaintenanceService
 @inject IAccountService AccountService
+@inject IAppHistoryService AppHistoryService
 @inject IMachineService MachineService
 @inject IStatusService StatusService
 @inject ITaskTypeService TaskTypeService
@@ -11,28 +12,14 @@
 @if (model != null)
 {
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator />
         <div class="form-row">
 
             <div class="form-group col">
                 <label>Дата окончания работ</label>
-                <InputDate @bind-Value="model.DateOfEnd" class="form-control" />
+                <InputDate @bind-Value="model.DateOfEnd" disabled="@model.DateOfEnd" class="form-control" />
                 <ValidationMessage For="@(() => model.DateOfEnd)" />
             </div>
-            <div class="form-group col">
-                <br>
-                <label>Табельный номер сотрудника</label>
-                <select @bind="model.User" class="form-select">
-                    @if (users != null)
-                    {
-                        @foreach (var user in users)
-                        {
-                            <option @key="user.Id" value="@user.Id">@user.Id</option>
-                        }
-                    }
-                </select>
-
-            </div>
+            
             <div class="form-group col">
                 <label>Комментарий к задаче</label>
                 <InputText @bind-Value="model.Comment" class="form-control" />
@@ -60,15 +47,24 @@
     private Maintenance maintenance = null;
     private IList<User> users;
 
+
     [Parameter]
     public string Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-        users = await AccountService.GetAll();
         maintenance = await MaintenanceService.GetById(Id);
+        users = await AccountService.GetAll();
+        foreach (var user in users)
+        {
+            if (user.Username == User.current)
+            {
+                maintenance.User = user;
+            }
+        }
         model = new EditMaintenance(maintenance);
+
         loading = false;
     }
     public async void OnValidSubmit()
@@ -76,7 +72,7 @@
         loading = true;
         try
         {
-            await MaintenanceService.Update(int.Parse(Id), model);
+            await MaintenanceService.Update1(int.Parse(Id), model);
             AlertService.Success("Запись успешно обновлена", keepAfterRouteChange: true);
             NavigationManager.NavigateTo("maintenance");
         }

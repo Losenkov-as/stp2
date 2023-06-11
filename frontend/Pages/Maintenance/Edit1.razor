@@ -1,0 +1,103 @@
+﻿@page "/maintenance/edit1"
+@inject IAlertService AlertService
+@inject IMaintenanceService MaintenanceService
+@inject IAccountService AccountService
+@inject IAppHistoryService AppHistoryService
+@inject IMachineService MachineService
+@inject IStatusService StatusService
+@inject ITaskTypeService TaskTypeService
+@inject NavigationManager NavigationManager
+
+<h1>Мои заявки</h1>
+    <table class="table table-striped table-sm table-responsive table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Номер заявки</th>
+                <th scope="col">Тип задачи</th>
+                <th scope="col">Плановая дата окончания работ</th>
+                <th scope="col">Номер станка</th>
+                <th scope="col">Тип станка</th>
+                <th scope="col">Модель станка</th>
+                <th scope="col">Комментарий диспетчера</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (maintenances1 != null)
+            {
+                foreach (var maintenance in maintenances1)
+                {
+
+                    <tr>
+                        <td>@maintenance.Id</td>
+                        <td>@maintenance.TaskType.Name</td>
+                        <td>@maintenance.DateOfUpdate</td>
+                        <td>@maintenance.Machine.InventoryNumber</td>
+                        <td>@maintenance.Status.Name</td>
+                        <td>@maintenance.Location.Workshop / @maintenance.Location.Plot</td>
+                        <td>@maintenance.Comment</td>
+                        <td style="white-space: nowrap">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Выберите действие
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="@($"maintenances/history/{maintenance.Id}")">Просмотреть историю</a>
+                                <a class="dropdown-item" href="@($"maintenances/toexe/{maintenance.Id}")">В работу</a>
+                                <a class="dropdown-item" href="@($"maintenances/cancel/{maintenance.Id}")">Отменить</a>
+                            </div>
+                            @*<NavLink href="@($"maintenances/edit/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Обработать</NavLink>
+                                <NavLink href="@($"maintenances/history/{maintenance.Id}")" class="btn btn-sm btn-primary mr-1">Просмотреть историю</NavLink>*@
+                            
+                        </td>
+                    </tr>
+                }
+            }
+            @if (loading)
+            {
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <span class="spinner-border spinner-border-lg align-center"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @code {
+        private bool loading;
+        private EditMaintenance model;
+        private Maintenance maintenance = null;
+        private IList<Maintenance> maintenances;
+        private IList<Maintenance> maintenances1;
+        private IList<AppHistory> apps;
+        private IList<AppHistory> apps1;
+        private IList<User> users;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            loading = true;
+            users = await AccountService.GetAll();
+            maintenances = await MaintenanceService.GetAll();
+            maintenances1 = new List<Maintenance>();
+            apps = await AppHistoryService.GetAll();
+            apps1 = new List<AppHistory>();
+            for (int i = 0; i < maintenances.Count; i++)
+            {
+                if (maintenances[i].User.Username == User.current)
+                {
+                    maintenances1.Add(maintenances[i]);
+                }
+            }
+            //for (int i = 0; i < maintenances1.Count; i++)
+            //{
+            //    for (int j = 0; j < maintenances1.Count; j++)
+            //    {
+            //        if (apps[i].Maintenance.Id == maintenances1[j].Id)
+            //            apps1[i] = await AppHistoryService.GetById(apps[i].Id.ToString());
+            //    }
+            //}
+            loading = false;
+        }
+
+}

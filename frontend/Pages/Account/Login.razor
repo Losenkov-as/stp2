@@ -3,6 +3,7 @@
 @inject IAlertService AlertService
 @inject NavigationManager NavigationManager
 
+
 <div class="card">
     <h4 class="card-header">Вход</h4>
     <div class="card-body">
@@ -33,6 +34,7 @@
 @code {
     private Models.Account.Login model = new Models.Account.Login();
     private bool loading;
+    private IList<User> users;
 
     private async void OnValidSubmit()
     {
@@ -43,6 +45,7 @@
         try
         {
             await AccountService.Login(model);
+            User.current = model.Username;
             var returnUrl = NavigationManager.QueryString("returnUrl") ?? "";
             NavigationManager.NavigateTo(returnUrl);
         }

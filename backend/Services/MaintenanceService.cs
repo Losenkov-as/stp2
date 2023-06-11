@@ -17,6 +17,8 @@ namespace WebApi.Services
         Maintenance GetById(int id);
         void Register(RegisterRequest model);
         void Update(int id, UpdateRequest model);
+        void Update1(int id, UpdateRequest model);
+        void Cancel(int id, UpdateRequest model);
         void Delete(int id);
     }
 
@@ -106,15 +108,15 @@ namespace WebApi.Services
                 TaskType = tasktype.Name,
                 CommentOfAuthor = model.Comment
             };
-            IEnumerable<AppHistory> arr = _context.AppHistories;
-            if (_context.AppHistories.Count() == 0) {
+            IEnumerable<AppHistory> arr = _context.AppHistory;
+            if (_context.AppHistory.Count() == 0) {
                 apphistory.Id = 1;
             }
             else { 
                  apphistory.Id = arr.OrderBy(id => apphistory.Id).Last().Id + 1; 
             }
             _context.Maintenances.Add(maintenance);
-            _context.AppHistories.Add(apphistory);
+            _context.AppHistory.Add(apphistory);
             _context.SaveChanges();
         }
 
@@ -134,7 +136,7 @@ namespace WebApi.Services
             Status status = new Status
             {
                 Id = 2,
-                Name = "В работе"
+                Name = "обработана"
             };
 
             AppHistory apphistory = new AppHistory
@@ -149,16 +151,62 @@ namespace WebApi.Services
                 DateOfEnd = model.DateOfEnd,
                 TaskType = maintenance.TaskType.Name,
                 Executor = user.Username,
-                Status = "В работе"
+                Status = "обработана"
             };
             //maintenance.Status = status;
             maintenance.User = user;
             maintenance.DateOfUpdate = model.DateOfEnd;
             maintenance.Comment = model.Comment;
+            maintenance.Status = status;
 
+            IEnumerable<AppHistory> arr = _context.AppHistory;
+            if (_context.AppHistory.Count() == 0)
+            {
+                apphistory.Id = 1;
+            }
+            else
+            {
+                apphistory.Id = arr.OrderBy(id => apphistory.Id).Last().Id + 2;
+            }
+            //AppHistory apphistory1 = new AppHistory();
+            //apphistory1 = _context.AppHistory.FirstOrDefault(u => u.Id == id);
+            _context.Maintenances.Update(maintenance);
+            _context.AppHistory.Add(apphistory);
+            _context.SaveChanges();
+        }
 
-            IEnumerable<AppHistory> arr = _context.AppHistories;
-            if (_context.AppHistories.Count() == 0)
+        public void Update1(int id, UpdateRequest model)
+        {
+            var maintenance = getMaintenance(id);
+
+            User user = null;
+            user = _context.Users.Where(user => user.Id == int.Parse(model.User)).FirstOrDefault();
+
+            AppHistory apphistory = new AppHistory
+            {
+                Maintenance = maintenance,
+                Machine = maintenance.Machine.InventoryNumber,
+                Author = maintenance.User.Username, //тут из-за порядка кода может возникнуть залупа, хотя пока норм
+                CommentOfAuthor = maintenance.Comment,
+                Location = maintenance.Location.Plot,
+                DateOfCreate = maintenance.DateOfUpdate,
+                CommentOfDispatcher = model.Comment,
+                DateOfEnd = model.DateOfEnd,
+                TaskType = maintenance.TaskType.Name,
+                Executor = user.Username,
+                Status = "в работе"
+            };
+            Status status = new Status
+            {
+                Id = 3,
+                Name = "в работе"
+            };
+            maintenance.User = user;
+            maintenance.DateOfUpdate = model.DateOfEnd;
+            maintenance.Comment = model.Comment;
+            maintenance.Status = status;
+            IEnumerable<AppHistory> arr = _context.AppHistory;
+            if (_context.AppHistory.Count() == 0)
             {
                 apphistory.Id = 1;
             }
@@ -169,16 +217,61 @@ namespace WebApi.Services
             //AppHistory apphistory1 = new AppHistory();
             //apphistory1 = _context.AppHistory.FirstOrDefault(u => u.Id == id);
             _context.Maintenances.Update(maintenance);
-            _context.AppHistories.Add(apphistory);
+            _context.AppHistory.Add(apphistory);
             _context.SaveChanges();
         }
-
-        public void Delete(int id)
+            public void Delete(int id)
         {
             var maintenance = getMaintenance(id);                     // как правильно удалять записи с внешними ключами? сейчас на этой функции 
             _context.Maintenances.Remove(maintenance);                // исключение из-за внешнего ключа
             _context.SaveChanges();                                           
 
+        }
+
+        public void Cancel(int id, UpdateRequest model)
+        {
+            var maintenance = getMaintenance(id);
+
+            User user = null;
+            user = _context.Users.Where(user => user.Id == int.Parse(model.User)).FirstOrDefault();
+
+            AppHistory apphistory = new AppHistory
+            {
+                Maintenance = maintenance,
+                Machine = maintenance.Machine.InventoryNumber,
+                Author = maintenance.User.Username, //тут из-за порядка кода может возникнуть залупа, хотя пока норм
+                CommentOfAuthor = maintenance.Comment,
+                Location = maintenance.Location.Plot,
+                DateOfCreate = maintenance.DateOfUpdate,
+                CommentOfDispatcher = model.Comment,
+                DateOfEnd = DateTime.Now,
+                TaskType = maintenance.TaskType.Name,
+                Executor = user.Username,
+                Status = "Отменена"
+            };
+            Status status = new Status
+            {
+                Id = 4,
+                Name = "Отменена"
+            };
+            maintenance.User = user;
+            maintenance.DateOfUpdate = model.DateOfEnd;
+            maintenance.Comment = model.Comment;
+            maintenance.Status = status;
+            IEnumerable<AppHistory> arr = _context.AppHistory;
+            if (_context.AppHistory.Count() == 0)
+            {
+                apphistory.Id = 1;
+            }
+            else
+            {
+                apphistory.Id = arr.OrderBy(id => apphistory.Id).Last().Id + 1;
+            }
+            //AppHistory apphistory1 = new AppHistory();
+            //apphistory1 = _context.AppHistory.FirstOrDefault(u => u.Id == id);
+            _context.Maintenances.Update(maintenance);
+            _context.AppHistory.Add(apphistory);
+            _context.SaveChanges();
         }
 
         // helper methods

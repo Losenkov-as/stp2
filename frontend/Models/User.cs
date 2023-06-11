@@ -12,7 +12,7 @@ namespace BlazorApp.Models
         public string Department { get; set; }
         public string Position { get; set; }
 
-
+        public static string current;
         public string Token { get; set; }
         public List<Role> Roles { get; set; } = new List<Role>();
         public bool IsDeleting { get; set; }

@@ -15,6 +15,8 @@ namespace BlazorApp.Services
         Task<IList<Maintenance>> GetAll();
         Task<Maintenance> GetById(string id);
         Task Update(int id, EditMaintenance model);
+        Task Cancel(int id, CancelMaintenance model);
+        Task Update1(int id, EditMaintenance model);
         Task Delete(string id);
     }
 
@@ -70,7 +72,30 @@ namespace BlazorApp.Services
                 await _localStorageService.SetItem(_maintenanceKey, Maintenance);
             }
         }
+        public async Task Update1(int id, EditMaintenance model)
+        {
+            await _httpService.Put($"/maintenances/update1/{id}", model);
 
+            // update stored Maintenance if the logged in Maintenance updated their own record
+            if (id == int.Parse(Maintenance.Id))
+            {
+                // update local storage
+                //Maintenance.Name = model.Name;
+                await _localStorageService.SetItem(_maintenanceKey, Maintenance);
+            }
+        }
+        public async Task Cancel(int id, CancelMaintenance model)
+        {
+            await _httpService.Put($"/maintenances/cancel/{id}", model);
+
+            // update stored Maintenance if the logged in Maintenance updated their own record
+            if (id == int.Parse(Maintenance.Id))
+            {
+                // update local storage
+                //Maintenance.Name = model.Name;
+                await _localStorageService.SetItem(_maintenanceKey, Maintenance);
+            }
+        }
         public async Task Delete(string id)
         {
             await _httpService.Delete($"/maintenances/{id}");

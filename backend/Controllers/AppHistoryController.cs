@@ -11,13 +11,13 @@ namespace WebApi.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class AppHistorysController : ControllerBase
+    public class AppHistoryController : ControllerBase
     {
         private IAppHistoryService _AppHistoryService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public AppHistorysController(
+        public AppHistoryController(
             IAppHistoryService AppHistoryService,
             IMapper mapper,
             IOptions<AppSettings> appSettings)

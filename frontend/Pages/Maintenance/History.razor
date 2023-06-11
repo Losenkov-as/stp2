@@ -4,31 +4,51 @@
 @inject IAccountService AccountService
 @inject NavigationManager NavigationManager
 
-<h1>Подробности заявки</h1>
+<h1>История заявки</h1>
 <table class="table table-striped table-sm table-responsive table-hover">
     <thead>
         <tr>
             <th scope="col">Номер заявки</th>
-            <th scope="col">Тип задачи</th>
             <th scope="col">Дата создания</th>
-            <th scope="col">Номер станка</th>
-            <th scope="col">Статус станка</th>
-            <th scope="col">Местоположение</th>
-            <th scope="col">Сотрудник</th>
+            <th scope="col">Дата обработки</th>
+            <th scope="col">Дата начала выполнения</th>
+            <th scope="col">Дата окончания выполнения</th>
+            <th scope="col">Cтанок</th>
+            <th scope="col">Cтатус заявки</th>
+            <th scope="col">Номер помещение</th>
+            <th scope="col">Автор</th>
+            <th scope="col">Диспетчер</th>
+            <th scope="col">Исполнитель</th>
+            <th scope="col">Тип задачи</th>
+            <th scope="col">Комментарий автора</th>
+            <th scope="col">Комментарий диспетчера</th>
+            <th scope="col">Комментарий исполнителя</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        @if (apps != null)
+        @if (apps1 != null)
         {
 
-            foreach (var app in apps)
+            foreach (var app in apps1)
             {
-                <tr>
-                    <td>@app.Author</td>
-
-                  
-                </tr>
+        <tr>
+            <td>@app.Maintenance.Id</td>
+            <td>@app.DateOfCreate</td>
+            <td>@app.DateOfTreatment</td>
+            <td>@app.DateOfStart</td>
+            <td>@app.DateOfEnd</td>
+            <td>@app.Machine</td>
+            <td>@app.Status</td>
+            <td>@app.Location</td>
+            <td>@app.Author</td>
+            <td>@app.Dispatcher</td>
+            <td>@app.Executor</td>
+            <td>@app.TaskType</td>
+            <td>@app.CommentOfAuthor</td>
+            <td>@app.CommentOfDispatcher</td>
+            <td>@app.CommentOfExecutor</td>
+        </tr>
             }
 
         }
@@ -47,7 +67,8 @@
     private bool loading;
     private Maintenance maintenance = new Maintenance();
     private IList<AppHistory> apps;
-    
+    private IList<AppHistory> apps1;
+
     [Parameter]
     public string Id { get; set; }
 
@@ -55,6 +76,15 @@
     {
         loading = true;
         apps = await AppHistoryService.GetAll();
+        maintenance = await MaintenanceService.GetById(Id);
+        apps1 = new List<AppHistory>(); 
+        for (int i = 0; i < apps.Count; i++) {
+            if (apps[i].Maintenance.Id == Id) {
+                apps[i].Maintenance = maintenance;
+                apps1.Add(apps[i]);
+            }
+        }
         loading = false;
     }
+
 }

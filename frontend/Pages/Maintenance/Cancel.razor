@@ -1,4 +1,4 @@
-﻿@page "/maintenances/edit/{Id}"
+﻿@page "/maintenances/canсel/{Id}"
 @inject IAlertService AlertService
 @inject IMaintenanceService MaintenanceService
 @inject IAccountService AccountService
@@ -7,32 +7,14 @@
 @inject ITaskTypeService TaskTypeService
 @inject NavigationManager NavigationManager
 
-<h1>Обработка</h1>
+<h1>Отмена заявки</h1>
 @if (model != null)
 {
     <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
         <div class="form-row">
 
-            <div class="form-group col">
-                <label>Дата окончания работ</label>
-                <InputDate @bind-Value="model.DateOfEnd" class="form-control" />
-                <ValidationMessage For="@(() => model.DateOfEnd)" />
-            </div>
-            <div class="form-group col">
-                <br>
-                <label>Табельный номер сотрудника</label>
-                <select @bind="model.User" class="form-select">
-                    @if (users != null)
-                    {
-                        @foreach (var user in users)
-                        {
-                            <option @key="user.Id" value="@user.Id">@user.Id</option>
-                        }
-                    }
-                </select>
-
-            </div>
+           
             <div class="form-group col">
                 <label>Комментарий к задаче</label>
                 <InputText @bind-Value="model.Comment" class="form-control" />
@@ -56,7 +38,7 @@
 
 @code {
     private bool loading;
-    private EditMaintenance model;
+    private CancelMaintenance model;
     private Maintenance maintenance = null;
     private IList<User> users;
 
@@ -68,7 +50,9 @@
         loading = true;
         users = await AccountService.GetAll();
         maintenance = await MaintenanceService.GetById(Id);
-        model = new EditMaintenance(maintenance);
+        model = new CancelMaintenance(maintenance);
+        model.User = User.current;
+
         loading = false;
     }
     public async void OnValidSubmit()
@@ -76,7 +60,7 @@
         loading = true;
         try
         {
-            await MaintenanceService.Update(int.Parse(Id), model);
+            await MaintenanceService.Cancel(int.Parse(Id), model);
             AlertService.Success("Запись успешно обновлена", keepAfterRouteChange: true);
             NavigationManager.NavigateTo("maintenance");
         }

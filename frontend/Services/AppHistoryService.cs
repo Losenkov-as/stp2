@@ -55,9 +55,6 @@ namespace BlazorApp.Services
         {
             return await _httpService.Get<AppHistory>($"/AppHistory/{id}");
         }
-
-       
-
         public async Task Delete(string id)
         {
             await _httpService.Delete($"/AppHistory/{id}");

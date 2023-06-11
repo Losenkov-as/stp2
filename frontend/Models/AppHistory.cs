@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BlazorApp.Models
 {
     public class AppHistory
     {
         public int Id { get; set; }
+
         public Maintenance Maintenance { get; set; }
         public DateTime DateOfCreate { get; set; }
         public DateTime DateOfTreatment { get; set; }

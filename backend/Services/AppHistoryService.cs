@@ -51,7 +51,7 @@ namespace WebApi.Services
 
         public IEnumerable<AppHistory> GetAll()
         {
-            return _context.AppHistories.Include(i => i.Maintenance);
+            return _context.AppHistory.Include(i => i.Maintenance);
         }
 
         public AppHistory GetById(int id)
@@ -79,7 +79,7 @@ namespace WebApi.Services
                 Maintenance = maintenance
             };
 
-            _context.AppHistories.Add(AppHistory);
+            _context.AppHistory.Add(AppHistory);
             _context.SaveChanges();
         }
 
@@ -114,7 +114,7 @@ namespace WebApi.Services
         public void Delete(int id)
         {
             var AppHistory = getAppHistory(id);
-            _context.AppHistories.Remove(AppHistory);
+            _context.AppHistory.Remove(AppHistory);
             _context.SaveChanges();
         }
 
@@ -122,7 +122,7 @@ namespace WebApi.Services
 
         private AppHistory getAppHistory(int id)
         {
-            var AppHistory = _context.AppHistories.FirstOrDefault(u => u.Id == id); // .FirstOrDefault(u => u.Id == id);
+            var AppHistory = _context.AppHistory.FirstOrDefault(u => u.Id == id); // .FirstOrDefault(u => u.Id == id);
             AppHistory.Maintenance = _context.Maintenances.FirstOrDefault(u => u.Id == AppHistory.Id);
             if (AppHistory == null) throw new KeyNotFoundException("Местоположение не найдено");
             return AppHistory;
